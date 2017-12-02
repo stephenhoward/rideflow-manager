@@ -1,0 +1,26 @@
+{
+  "name": "rideflow-manager",
+  "description": "A web front end for managing a RideFlow transit server",
+  "version": "0.1.0",
+  "url": "tbd",
+  "license": "tbd",
+  "author": "Stephen Howard <stephen@enterity.com>",
+  "private": false,
+  "scripts": {
+    "dev": "brunch watch --server",
+    "build": "brunch build -p"
+  },
+  "dependencies": {
+    "vue": "^2.3.3",
+    "brunch": "^2.10.10",
+    "css-loader": "^0.25.0",
+    "file-loader": "^0.9.0",
+    "node-sass": "^4.5.0",
+    "sass-brunch": "^2.10.4",
+    "sass-loader": "^5.0.1",
+    "vue-brunch": "^2.0.1",
+    "vue-loader": "^12.1.0",
+    "vue-template-compiler": "^2.3.3"
+  }
+}
+

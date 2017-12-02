@@ -1,0 +1,37 @@
+---
+- hosts: all
+  become: true
+  become_user: root
+  tasks:
+  - name: install ruby
+    apt:
+      name: ruby
+      update_cache: yes
+  - name: install ruby-dev
+    apt:
+      name: ruby-dev
+  - name: install sass
+    shell: gem install sass
+  - name:  Download node
+    shell: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+  - name: Install node
+    shell: sudo apt-get install -y nodejs
+  - name: install brunch
+    npm:
+      name: brunch
+      global: yes
+  - name: install vue-brunch
+    npm:
+      name: vue-brunch
+      global: yes
+  - name: install sass-brunch
+    npm:
+      name: sass-brunch
+      global: yes
+  - name: link nginx conf file
+    file:
+      src: /rideflow-manager/config/nginx.conf
+      dest: /etc/nginx/conf.d/rideflow-manager.conf
+      state: link
+      owner: rideflow
+      group: rideflow
