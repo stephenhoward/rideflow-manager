@@ -15,27 +15,24 @@
   - name:  Download node
     shell: curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
   - name: Install node
-    shell: sudo apt-get install -y nodejs
-  - name: install brunch
+    apt: 
+      name: nodejs=8.9.1-1nodesource1
+      state: present
+  - name: Install g++
+    apt:
+      name: g++
+      update_cache: yes
+  - name: Install brunch
     npm:
       name: brunch
+      version: 2.10.12
+      state: present
       global: yes
-  - name: install vue-brunch
-    npm:
-      name: vue-brunch
-      global: yes
-  - name: install sass-brunch
-    npm:
-      name: sass-brunch
-      global: yes
-  - name: link nginx conf file
-    file:
-      src: /host-web/config/nginx.conf
-      dest: /etc/nginx/conf.d/rideflow-manager.conf
-      state: link
-      owner: rideflow
-      group: rideflow
   - name: start nginx
     service:
       name: nginx
       state: restarted
+  - name: build javascript app
+    shell: brunch build
+    args:
+      chdir: /host-web
