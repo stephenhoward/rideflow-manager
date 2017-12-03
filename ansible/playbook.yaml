@@ -30,8 +30,12 @@
       global: yes
   - name: link nginx conf file
     file:
-      src: /rideflow-manager/config/nginx.conf
+      src: /host-web/config/nginx.conf
       dest: /etc/nginx/conf.d/rideflow-manager.conf
       state: link
       owner: rideflow
       group: rideflow
+  - name: start nginx
+    service:
+      name: nginx
+      state: restarted
