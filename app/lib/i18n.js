@@ -18,10 +18,6 @@ module.exports = {
             rides: {
                 nav: 'Ride Data'
             },
-            password_reset_sent : {
-              title: 'Password Reset Sent',
-              description: 'We have sent a link to reset your password to'
-            }
         }
     }
 };

@@ -1,17 +1,20 @@
-window.Vue = require('vue');
+window.Vue       = require('vue');
 window.VueRouter = require('vue-router');
-window.VueI18n = require('vue-i18n');
+window.VueI18n   = require('vue-i18n');
 
-require('./lib/authorize.js');
+let authorize = require('./lib/authorize.js');
 
-import { messages } from './lib/i18n.js';
-import { routes   } from './lib/router.js';
+window.app = new Vue({
+    router : new VueRouter({
+        routes   : require('./lib/router.js').routes
+    }),
+    i18n   : new VueI18n({
+        messages : require('./lib/i18n.js').messages,
+        locale   : 'en'
+    })
 
-const i18n   = new VueI18n({ messages, locale: 'en' });
-const router = new VueRouter({ routes });
+}).$mount('#rfapp');
 
-new Vue({ router, i18n }).mount('#rfapp');
-
-if ( ! has_token() && window.app.$router.currentRoute && window.app.$router.currentRoute.path != '/login' ) {
+if ( ! authorize.has_token() && window.app.$router.currentRoute && window.app.$router.currentRoute.path != '/login' ) {
     window.app.$router.push('/login');
 }

@@ -1,79 +1,82 @@
 
-export var ListVueMixin = {
-    data: () => {
-        return {
-            loading : false,
-            models  : [
-            ],
-            error   : null
-        };            
-    },
-    created: function() {
-        this.fetchData();
-    },
-    watch: {
-        '$route': 'fetchData'
-    },
-    methods: {
-        type: function() { return null },
-        url:  function() { return ''   },
+module.exports = {
 
-        add: function() {
-            this.$router.push( this.url() + '/new' );
+    ListVueMixin: {
+        data: () => {
+            return {
+                loading : false,
+                models  : [
+                ],
+                error   : null
+            };            
         },
-        fetchData: function() {
-            let defer = $.Deferred();
-            let type  = this.type();
+        created: function() {
+            this.fetchData();
+        },
+        watch: {
+            '$route': 'fetchData'
+        },
+        methods: {
+            type: function() { return null },
+            url:  function() { return ''   },
 
-            type.list( '/v1' + this.url() ).done( (items) => {
-                this.models = items;
-            });
+            add: function() {
+                this.$router.push( this.url() + '/new' );
+            },
+            fetchData: function() {
+                let defer = $.Deferred();
+                let type  = this.type();
 
-            return defer.promise();
+                type.list( '/v1' + this.url() ).done( (items) => {
+                    this.models = items;
+                });
+
+                return defer.promise();
+            }
         }
-    }
-};
+    },
 
-export var EditVueMixin = {
-    props: ['id'],
-    data: function() {
-        return {
-            loading: false,
-            model  : null,
-            error  : null
-        };
-    },
-    created: function() {
-        this.fetchData();
-    },
-    watch: {
-       '$route': 'fetchData' 
-    },
-    methods: {
-        fetchData: function() {
-            let defer = $.Deferred();
-            if ( ! this.model ) {
-                let type = this.type();
-                this.model = new type({});
-                if ( this.id ) {
-                    type.load( '/v1' + this.url() + '/'+this.id).done( (model) => {
-                        this.model = model;
-                        defer.resolve(this.model);
-                    });
+    EditVueMixin: {
+        props: ['id'],
+        data: function() {
+            return {
+                loading: false,
+                model  : null,
+                error  : null
+            };
+        },
+        created: function() {
+            this.fetchData();
+        },
+        watch: {
+           '$route': 'fetchData' 
+        },
+        methods: {
+            fetchData: function() {
+                let defer = $.Deferred();
+                if ( ! this.model ) {
+                    let type = this.type();
+                    this.model = new type({});
+                    if ( this.id ) {
+                        type.load( '/v1' + this.url() + '/'+this.id).done( (model) => {
+                            this.model = model;
+                            defer.resolve(this.model);
+                        });
+                    }
+                }
+                else {
+                    defer.resolve(this.model);
+                }
+                return defer.promise();
+            },
+            saveData: function() {
+                if ( this.model.id ) {
+                    this.model.save( '/v1' + this.url() + '/' + this.model.id );
+                }
+                else {
+                    this.model.save( '/v1' + this.url() );
                 }
             }
-            else {
-                defer.resolve(this.model);
-            }
-            return defer.promise();
-        },
-        saveData: function() {
-            if ( this.model.id ) {
-                this.model.save( '/v1' + this.url() + '/' + this.model.id );
-            }
-            else {
-                this.model.save( '/v1' + this.url() );
-            }
         }
     }
-};
+}

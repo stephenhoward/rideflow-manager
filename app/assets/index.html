@@ -2,7 +2,7 @@
     <head>
         <title>RideFlow Admin</title>
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
-        <link rel="stylesheet" type="text/css" href="/css/app.css">
+        <link rel="stylesheet" type="text/css" href="/app.css">
     </head>
     <body>
         <div id="rfapp">
@@ -14,24 +14,7 @@
         <script type="text/javascript">require('main');</script>
       </body>
 
-    <div class="root template">
-        <header>
-            <nav>
-                <li><router-link to="/routes">{{   $t( "routes.nav"   ) }}</router-link></li>
-                <li><router-link to="/vehicles">{{ $t( "vehicles.nav" ) }}</router-link></li>
-                <li><router-link to="/drivers">{{  $t( "drivers.nav"  ) }}</router-link></li>
-                <li><router-link to="/rides">{{    $t( "rides.nav"    ) }}</router-link></li>
-            </nav>
-        </header>
-        <main>
-            <router-view></router-view>
-            <div id="testmap" style="height: 400px;">
-            </div>
-        </main>
-        <footer>
-        </footer>
-    </div>
-
+<!--
     <div class="routes template">
         <h2>{{ $t( "routes.title" ) }}</h2>
         <button v-on:click="add" v-bind:title="$t('routes.add_title')"type="button">+</button>
@@ -64,29 +47,6 @@
     <button v-on:click="saveData" type="button" >{{ $t("vehicle.create") }}</button>
     </div>
 
-    <!-- ==== login flow ==== -->
-
-    <div class="login template">
-        <h3>{{ $t('login.title') }}</h3>
-        <div>{{ error }}</div>
-        <input type="email"    v-bind:placeholder="$t('login.email')"    v-model="email">
-        <input type="password" v-bind:placeholder="$t('login.password')" v-model="password">
-        <button v-on:click="doLogin" type="button">{{ $t("login.login") }}</button>
-        <router-link :to="{ name: 'forgot_password', params: { em: this.email }}" >{{ $t("login.forgot_password") }}</router-link>
-    </div>
-
-    <div class="forgot_password template">
-        <h3>{{ $t('forgot_password.title') }}</h3>
-        <p>{{ $t('forgot_password.instructions') }}</p>
-        <input type="email" v-bind:placeholder="$t('forgot_password.email')" v-model="email">
-        <button v-on:click="doReset" type="button">{{ $t('forgot_password.go_button') }}</button>
-        <router-link :to="{ name: 'login', params: { em: this.email }}" >{{ $t("forgot_password.login_link") }}</router-link>
-    </div>
-
-    <div class="password_reset_sent template">
-        <h3>{{ $t('password_reset.title') }}</h3>
-        <p>{{ $t('password_reset.check_email') }} {{ model.email }}.</p>
-        <router-link :to="{ name: 'login', params: { em: this.email }}" >{{ $t("forgot_password.login_link") }}</router-link>
-    </div>
+-->
 
 </html>
