@@ -1,7 +1,17 @@
+<i18n>
+{
+    en: {
+        name: 'vehicle identifier',
+        create: 'add vehicle',
+        update: 'save changes'
+    }
+}
+</i18n>
+
 <template>
     <div class="edit_vehicle">
-    <input type="text" v-model="model.name" v-bind:placeholder="$t('vehicle.name')">
-    <button v-on:click="saveData" type="button" >{{ $t("vehicle.create") }}</button>
+    <input type="text" v-model="model.name" v-bind:placeholder="$t('name')">
+    <button v-on:click="saveData" type="button" >{{ $t("create") }}</button>
     </div>
 </template>
 

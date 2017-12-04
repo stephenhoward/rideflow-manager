@@ -1,7 +1,17 @@
+<i18n>
+{
+    en: {
+        nav: 'Vehicles',
+        title: 'Vehicles',
+        add_title: 'Add Vehicle'
+    }
+}
+</i18n>
+
 <template>
     <div class="vehicles">
-        <h2>{{ $t( "vehicles.title" ) }}</h2>
-        <button v-on:click="add" v-bind:title="$t('vehicles.add_title')"type="button">+</button>
+        <h2>{{ $t( "title" ) }}</h2>
+        <button v-on:click="add" v-bind:title="$t('add_title')"type="button">+</button>
         <ul>
             <vehicle-summary v-for="model in models" :key="model.id" :model="model"></vehicle-summary>
         </ul>    
