@@ -1,14 +1,3 @@
-<i18n>
-{
-    en: {
-        password_reset_sent : {
-            title: 'Password Reset Sent',
-            description: 'We have sent a link to reset your password to'
-        }
-    }
-}
-</i18n>
-
 <template>
     <div class="password_reset_sent">
         <h3>{{ $t('password_reset.title') }}</h3>

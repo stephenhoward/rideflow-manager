@@ -18,7 +18,6 @@
 <script>
     import EditVueMixin from '../js/lib/vue_mixins';
     export default {
-        template: ht('div.edit_vehicle'),
         mixins: [ EditVueMixin ],
 
         methods: {

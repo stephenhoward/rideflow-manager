@@ -1,17 +1,3 @@
-<i18n>
-{
-    en: {            
-        forgot_password: {
-            title: 'Forgot your password?',
-            instructions: 'No problem. Enter your email address and we will email you a password reset link.',
-            email: 'your email address',
-            go_button: 'send password reset',
-            login_link: 'back to login'
-        }
-    }
-}
-</i18n>
-
 <template>
     <div class="forgot_password">
         <h3>{{ $t('forgot_password.title') }}</h3>

@@ -1,17 +1,3 @@
-<i18n>
-{
-    en: {            
-        login: {
-          title: 'Please Login',
-          email: 'Email',
-          password: 'Password',
-          login: 'login',
-          forgot_password: 'forgot your password?'
-        }
-    }
-}
-</i18n>
-
 <template>
     <div class="login">
         <h3>{{ $t('login.title') }}</h3>
