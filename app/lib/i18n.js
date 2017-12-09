@@ -35,7 +35,8 @@ module.exports = {
             password_reset_sent : {
                 title: 'Password Reset Sent',
                 description: 'We have sent a link to reset your password to'
-            }
+            },
+            logout: "Logout"
         }
     }
 };
