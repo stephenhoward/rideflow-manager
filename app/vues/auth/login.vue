@@ -1,7 +1,7 @@
 <template>
     <div class="login">
         <h3>{{ $t('login.title') }}</h3>
-        <div>{{ error }}</div>
+        <div>{{ err }}</div>
         <input type="email"    v-bind:placeholder="$t('login.email')"    v-model="email">
         <input type="password" v-bind:placeholder="$t('login.password')" v-model="password">
         <button v-on:click="doLogin" type="button">{{ $t("login.login") }}</button>
@@ -18,12 +18,14 @@ export default {
         console.log('data');
 
         return {
+            err      : '',
             email    : '',
             password : ''
         };
 
     },
     created: function() {
+        this.err   = this.error || '';
         this.email = this.em || '';
         console.log('created');
     },
@@ -31,11 +33,11 @@ export default {
         doLogin: function() {
             authorize.login(this.email,this.password)
                 .done(() => {
-                    this.error = '';
-
+                    this.err = '';
+                    window.app.$router.push('/');
                 })
                 .fail((error) => {
-                    this.error = error;
+                    this.err = error;
                 });
         },
         doLogout: function() {

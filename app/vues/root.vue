@@ -1,14 +1,10 @@
 <template>
     <div class="root">
         <header>
+            <button v-on:click="toggleOverlay">Toggle</button>
             <router-view></router-view>
-            <nav>
-                <li><router-link to="/routes">{{   $t( "routes.nav"   ) }}</router-link></li>
-                <li><router-link to="/vehicles">{{ $t( "vehicles.nav" ) }}</router-link></li>
-                <li><router-link to="/drivers">{{  $t( "drivers.nav"  ) }}</router-link></li>
-                <li><router-link to="/rides">{{    $t( "rides.nav"    ) }}</router-link></li>
-            </nav>
         </header>
+
         <main>
             <routemap></routemap>
         </main>
@@ -20,6 +16,19 @@
     export default {
         data: () => {
             return {};
+        },
+        methods: {
+            toggleOverlay: function() {
+                let route = window.app.$router.currentRoute;
+
+                if ( ! route || route.path == '/' ) {
+                    window.app.$router.push('/menu');
+                }
+                else {
+                    window.app.$router.push('/');                    
+                }
+
+            }
         }
     }
 </script>
