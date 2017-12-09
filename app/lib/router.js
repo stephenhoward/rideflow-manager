@@ -5,6 +5,7 @@ module.exports = {
       { 
           path: '/', component: require('../vues/root.vue'),
           children: [
+              { path: 'menu', component: require('../vues/main_menu.vue')  }
               // { path: 'routes', component: rfRoutes },
               // { path: 'routes/new', component: rfEditRoute },
               // { path: 'routes/:id/edit', component: rfEditRoute, props: true },
