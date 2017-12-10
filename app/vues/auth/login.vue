@@ -2,8 +2,8 @@
     <div class="login">
         <h3>{{ $t('login.title') }}</h3>
         <div>{{ err }}</div>
-        <input type="email"    v-bind:placeholder="$t('login.email')"    v-model="email">
-        <input type="password" v-bind:placeholder="$t('login.password')" v-model="password">
+        <div><input type="email"    v-bind:placeholder="$t('login.email')"    v-model="email"></div>
+        <div><input type="password" v-bind:placeholder="$t('login.password')" v-model="password"></div>
         <button v-on:click="doLogin" type="button">{{ $t("login.login") }}</button>
         <router-link :to="{ name: 'forgot_password', params: { em: this.email }}" >{{ $t("login.forgot_password") }}</router-link>
     </div>

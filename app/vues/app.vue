@@ -3,7 +3,7 @@
     display: none;
 }
 
-#rfapp {
+body {
     width: 100%;
     display: grid;
     min-height: 100%;
@@ -19,9 +19,6 @@
         grid-row-gap: 8px;
         h3 {
             margin: 0;
-        }
-        input {
-            display: block;
         }
         button {
             justify-self: center;

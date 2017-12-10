@@ -1,7 +1,41 @@
+<style lang="sass">
+    header {
+        float: right;
+        margin: 15px;
+        padding: 10px;
+        button.toggle {
+            padding: 4px 8px;
+            background-color: red;
+            border: none;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 14pt;
+            font-weight: 700;
+            float: right;
+            &:focus {
+                outline: none;
+            }
+            & + * {
+                clear: right;
+            }
+        }
+    }
+    header.open {
+        box-shadow: 5px 5px 5px rgba(100,100,100,.5);
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background-color: white;
+        button.toggle {
+            color: #aaa;
+            background-color: transparent;
+        }
+    }
+</style>
+
 <template>
     <div class="root">
         <header>
-            <button v-on:click="toggleOverlay">Toggle</button>
+            <button class="toggle" v-on:click="toggleOverlay">+</button>
             <router-view></router-view>
         </header>
 
@@ -23,9 +57,11 @@
 
                 if ( ! route || route.path == '/' ) {
                     window.app.$router.push('/menu');
+                    $('header').addClass('open');
                 }
                 else {
                     window.app.$router.push('/');                    
+                    $('header').removeClass('open');
                 }
 
             }
