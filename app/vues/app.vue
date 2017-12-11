@@ -2,8 +2,13 @@
 .template {
     display: none;
 }
-
+html {
+    margin: 0;
+    padding: 0;
+}
 body {
+    margin: 0;
+    padding: 0;
     width: 100%;
     display: grid;
     min-height: 100%;

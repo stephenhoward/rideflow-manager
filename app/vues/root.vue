@@ -1,14 +1,24 @@
-<style lang="sass">
-    header {
-        float: right;
+<style lang="sass" scoped>
+    div.root {
+        display: grid;
+        align-self: stretch;
+        justify-self: stretch;
+    }
+    aside {
+        position: absolute;
+        top: 15px;
+        right: 15px;
         margin: 15px;
         padding: 10px;
+        z-index: 5;
+
         button.toggle {
             padding: 4px 8px;
-            background-color: red;
+            box-shadow: 5px 5px 5px rgba(100,100,100,.5);
+            color: white;
             border: none;
-            color: #fff;
-            border-radius: 10px;
+            background-color: #fa6;
+            border-radius: 15px;
             font-size: 14pt;
             font-weight: 700;
             float: right;
@@ -19,29 +29,29 @@
                 clear: right;
             }
         }
-    }
-    header.open {
-        box-shadow: 5px 5px 5px rgba(100,100,100,.5);
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        background-color: white;
-        button.toggle {
-            color: #aaa;
-            background-color: transparent;
+        &.open {
+            min-width: 200px;
+            box-shadow: 5px 5px 5px rgba(100,100,100,.5);
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: white;
+            button.toggle {
+                color: #aaa;
+                box-shadow: none;
+                background-color: transparent;
+            }
         }
     }
 </style>
 
 <template>
     <div class="root">
-        <header>
+        <aside>
             <button class="toggle" v-on:click="toggleOverlay">+</button>
             <router-view></router-view>
-        </header>
+        </aside>
 
-        <main>
-            <routemap></routemap>
-        </main>
+        <routemap></routemap>
     </div>
 </template>
 
@@ -57,11 +67,11 @@
 
                 if ( ! route || route.path == '/' ) {
                     window.app.$router.push('/menu');
-                    $('header').addClass('open');
+                    $('div.root aside').addClass('open');
                 }
                 else {
                     window.app.$router.push('/');                    
-                    $('header').removeClass('open');
+                    $('div.root aside').removeClass('open');
                 }
 
             }

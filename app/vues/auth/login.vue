@@ -27,7 +27,6 @@ export default {
     created: function() {
         this.err   = this.error || '';
         this.email = this.em || '';
-        console.log('created');
     },
     methods : {
         doLogin: function() {

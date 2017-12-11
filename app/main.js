@@ -2,6 +2,9 @@ window.Vue       = require('vue');
 window.VueRouter = require('vue-router');
 window.VueI18n   = require('vue-i18n');
 
+// needed by map.vue, but brunch won't grab it from a .vue file
+window.L      = require('leaflet');
+
 let authorize = require('./lib/authorize.js');
 let App       = require('./vues/app.vue');
 
