@@ -11,6 +11,10 @@ module.exports = {
         vue: {
             extractCSS: true,
             out: './public/app.css'
+        },
+        copycat: {
+            "images": ["node_modules/leaflet/dist/images"],
+            onlyChanged: true
         }
     },
     npm: {

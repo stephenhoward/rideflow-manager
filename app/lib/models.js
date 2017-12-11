@@ -1,3 +1,4 @@
+let Model = require('./model.js');
 
 
 class Arrival extends Model {
@@ -299,3 +300,5 @@ class Vehicle extends Model {
 
 
 }
+
+module.exports = { Arrival, Pass, Ride, Route, RouteSession, Stop, User, Vehicle };
