@@ -20,19 +20,20 @@
                 map: null
             };
         },
-        created: function() {
-            let self = this;
-            setTimeout(function(){
+        mounted: function() {
+            
+            this.$nextTick( () => {
 
-            self.map = L.map('transitmap').setView( config.map.coordinates, config.map.zoom );
+                this.map = L.map('transitmap').setView( config.map.coordinates, config.map.zoom );
 
-            L.tileLayer(config.map.tiles, {
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-                maxZoom: 18,
-                id: config.map.view,
-                accessToken: config.map.token
-            }).addTo(self.map);
-            },1000);
+                L.tileLayer(config.map.tiles, {
+                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+                    maxZoom: 18,
+                    id: config.map.view,
+                    accessToken: config.map.token
+                }).addTo(this.map);
+
+            });
         },
     };
     

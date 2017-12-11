@@ -5,8 +5,8 @@ module.exports = {
         view  : 'mapbox.streets',
         token : 'your.access.token',
 
-        coordinates : [ 51.505, -0.09 ],
-        zoom: 13
+        coordinates : [ 44.85307, -123.2151 ],
+        zoom: 14
 
     }
 }

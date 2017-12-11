@@ -8,8 +8,6 @@
         position: absolute;
         top: 15px;
         right: 15px;
-        margin: 15px;
-        padding: 10px;
         z-index: 5;
 
         button.toggle {
@@ -30,6 +28,8 @@
             }
         }
         &.open {
+            margin: 15px;
+            padding: 10px;
             min-width: 200px;
             box-shadow: 5px 5px 5px rgba(100,100,100,.5);
             border-radius: 8px;
