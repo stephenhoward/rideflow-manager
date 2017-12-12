@@ -76,8 +76,7 @@ class Ride extends Model {
             "class" : '',
             "heading" : '',
             "id" : '',
-            "latitude" : 0,
-            "longitude" : 0,
+            "location" : [],
             "pass_type" : '',
             "route_session" : null,
             "timestamp" : '',
@@ -98,11 +97,8 @@ class Ride extends Model {
     get id()    { return this._get('id');      }
     set id(val) { return this._set('id',val);  }
     
-    get latitude()    { return this._get('latitude');      }
-    set latitude(val) { return this._set('latitude',val);  }
-    
-    get longitude()    { return this._get('longitude');      }
-    set longitude(val) { return this._set('longitude',val);  }
+    get location()    { return this._get('location');      }
+    set location(val) { return this._set('location',val);  }
     
     get pass_type()    { return this._get('pass_type');      }
     set pass_type(val) { return this._set('pass_type',val);  }
@@ -126,6 +122,7 @@ class Route extends Model {
         return {
             "id" : '',
             "name" : '',
+            "path" : [],
             "stops" : []
         };
 
@@ -136,6 +133,9 @@ class Route extends Model {
     
     get name()    { return this._get('name');      }
     set name(val) { return this._set('name',val);  }
+    
+    get path()    { return this._get('path');      }
+    set path(val) { return this._set('path',val);  }
     
     get stops()    { return this._get('stops');      }
     set stops(val) { return this._set('stops',val);  }
@@ -153,8 +153,7 @@ class RouteSession extends Model {
             "driver" : null,
             "heading" : '',
             "id" : '',
-            "latitude" : 0,
-            "longitude" : 0,
+            "location" : [],
             "rides" : [],
             "route" : null,
             "session_end" : '',
@@ -179,11 +178,8 @@ class RouteSession extends Model {
     get id()    { return this._get('id');      }
     set id(val) { return this._set('id',val);  }
     
-    get latitude()    { return this._get('latitude');      }
-    set latitude(val) { return this._set('latitude',val);  }
-    
-    get longitude()    { return this._get('longitude');      }
-    set longitude(val) { return this._set('longitude',val);  }
+    get location()    { return this._get('location');      }
+    set location(val) { return this._set('location',val);  }
     
     get rides()    { return this._get('rides');      }
     set rides(val) { return this._set('rides',val);  }
@@ -211,8 +207,7 @@ class Stop extends Model {
             "arrival" : null,
             "date_updated" : '',
             "id" : '',
-            "latitude" : 0,
-            "longitude" : 0,
+            "location" : [],
             "name" : '',
             "routes" : []
         };
@@ -228,11 +223,8 @@ class Stop extends Model {
     get id()    { return this._get('id');      }
     set id(val) { return this._set('id',val);  }
     
-    get latitude()    { return this._get('latitude');      }
-    set latitude(val) { return this._set('latitude',val);  }
-    
-    get longitude()    { return this._get('longitude');      }
-    set longitude(val) { return this._set('longitude',val);  }
+    get location()    { return this._get('location');      }
+    set location(val) { return this._set('location',val);  }
     
     get name()    { return this._get('name');      }
     set name(val) { return this._set('name',val);  }
@@ -300,5 +292,6 @@ class Vehicle extends Model {
 
 
 }
+
 
 module.exports = { Arrival, Pass, Ride, Route, RouteSession, Stop, User, Vehicle };

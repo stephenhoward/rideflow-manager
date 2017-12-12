@@ -13,6 +13,7 @@
 <script>
     const config     = require('../lib/config.js');
     let RouteSession = require('../lib/models.js').RouteSession;
+    let Route        = require('../lib/models.js').Route;
 
     export default {
         data: () => {
@@ -20,16 +21,25 @@
             return {
                 map      : null,
                 routes   : [],
+                sessions : [],
                 markers  : {}
             };
         },
         watch: {
-            routes: {
+            sessions: {
                 handler: function(newVehicles) {
                     this.updateVehicles();
                 },
                 deep: true
+            },
+            routes: {
+
             }
+        },
+        created: function() {
+            var self = this;
+
+
         },
         mounted: function() {
 
@@ -44,9 +54,12 @@
                     accessToken: config.map.token
                 }).addTo(this.map);
 
-                var lat = config.map.coordinates[0];
-                var lon = config.map.coordinates[1];
-                this.routes = [ new RouteSession({ latitude: lat, longitude: lon, id: 'test' }) ];
+                this.sessions = [ new RouteSession({ location: config.map.coordinates, id: 'test' }) ];
+
+                Route.list('/v1/routes').done( (routes) => {
+
+                    self.routes = routes;
+                });
 
             });
         },
@@ -58,12 +71,12 @@
                     return;
                 }
 
-                $.each(self.routes,function(i,vehicle) {
+                $.each(self.sessions,function(i,vehicle) {
                     if ( self.markers[ vehicle.id ] ) {
-                        self.markers[ vehicle.id ].setLatLng( [ vehicle.latitude, vehicle.longitude ] );
+                        self.markers[ vehicle.id ].setLatLng( vehicle.location );
                     }
                     else {
-                        self.markers[ vehicle.id ] = L.marker([ vehicle.latitude, vehicle.longitude ]).addTo(self.map);
+                        self.markers[ vehicle.id ] = L.marker( vehicle.location ).addTo(self.map);
                     }
                 });
             }
