@@ -46,29 +46,25 @@ module.exports = {
     }
 };
 
-$(function() {
-
-    $.ajaxSetup({
-        beforeSend: (xhr) => {
-            let jwt = sessionStorage.getItem('jwt');
-            if ( jwt ) {
-                xhr.setRequestHeader( 'Authorization', 'Bearer ' + jwt );
-            }
-        },
-        statusCode: {
-            401: (xhr,err,error_text) => {
-                console.log('need to log in');
-                console.log(error_text);
-                window.app.$router.push({ name: 'login', params: { error: xhr.status } });
-            }
+$.ajaxSetup({
+    beforeSend: (xhr) => {
+        let jwt = sessionStorage.getItem('jwt');
+        if ( jwt ) {
+            xhr.setRequestHeader( 'Authorization', 'Bearer ' + jwt );
         }
-    });
-
-    if ( sessionStorage.getItem('jwt') ) {
-        set_token( sessionStorage.getItem('jwt') );
+    },
+    statusCode: {
+        401: (xhr,err,error_text) => {
+            console.log('need to log in');
+            console.log(error_text);
+            window.app.$router.push({ name: 'login', params: { error: xhr.status } });
+        }
     }
-
 });
+
+if ( sessionStorage.getItem('jwt') ) {
+    set_token( sessionStorage.getItem('jwt') );
+}
 
 function refresh_login(timeout) {
     let timer = timeout - Math.floor(Date.now() / 1000) - 20;
