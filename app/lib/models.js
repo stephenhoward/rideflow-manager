@@ -128,6 +128,11 @@ class Route extends Model {
 
     }
 
+    static url() {
+        return '/v1/routes';
+    }
+
+
     get id()    { return this._get('id');      }
     set id(val) { return this._set('id',val);  }
     
@@ -271,6 +276,11 @@ class Vehicle extends Model {
             "type" : ''
         };
 
+    }
+
+    static url() {
+        console.log('hi url');
+        return '/v1/vehicles';
     }
 
     get id()    { return this._get('id');      }

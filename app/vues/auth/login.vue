@@ -15,14 +15,12 @@ const authorize = require('../../lib/authorize.js');
 export default {
     props    : ['error','em'],
     data     : () => {
-        console.log('data');
 
         return {
             err      : '',
             email    : '',
             password : ''
         };
-
     },
     created: function() {
         this.err   = this.error || '';

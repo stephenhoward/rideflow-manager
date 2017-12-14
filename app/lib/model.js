@@ -78,6 +78,23 @@ class Model {
         return defer.promise();
     }
 
+    static all(refresh) {
+        var defer = $.Deferred();
+
+        if ( ! this._records || refresh ) {
+
+            this._records = this.list( this.url() ).done((list) => {
+                this._records = list;
+                defer.resolve(list);
+            });
+        }
+        else {
+            defer.resolve(this._records);
+        }
+
+        return defer.promise();
+    }
+
 }
 
 module.exports = Model;

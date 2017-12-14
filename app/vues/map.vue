@@ -56,7 +56,7 @@
 
                 this.sessions = [ new RouteSession({ location: config.map.coordinates, id: 'test' }) ];
 
-                Route.list('/v1/routes').done( (routes) => {
+                Route.all().done( (routes) => {
 
                     self.routes = routes;
                 });

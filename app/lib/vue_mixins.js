@@ -25,10 +25,9 @@ module.exports = {
             },
             fetchData: function() {
                 let defer = $.Deferred();
-                let type  = this.type();
-
-                type.list( '/v1' + this.url() ).done( (items) => {
+                let type  = this.type().all().done( (items) => {
                     this.models = items;
+                    defer.resolve(items);
                 });
 
                 return defer.promise();
