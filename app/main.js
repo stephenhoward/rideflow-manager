@@ -18,7 +18,9 @@ window.app = new Vue({
         locale   : 'en'
     })
 
-}).$mount('#rfapp');
+});
+
+app.$mount('#rfapp');
 
 if ( ! authorize.has_token() && window.app.$router.currentRoute && window.app.$router.currentRoute.path != '/login' ) {
     window.app.$router.push('/login');

@@ -61,6 +61,9 @@
         data: () => {
             return {};
         },
+        mounted: function () {
+            this.toggleOverlay();
+        },
         methods: {
             toggleOverlay: function() {
                 let route = window.app.$router.currentRoute;

@@ -18,6 +18,9 @@ module.exports = {
             rides: {
                 nav: 'Ride Data'
             },
+            vehicles: {
+                nav: 'Vehicles'
+            },
             login: {
               title: 'Please Login',
               email: 'Email',

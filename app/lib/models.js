@@ -279,7 +279,6 @@ class Vehicle extends Model {
     }
 
     static url() {
-        console.log('hi url');
         return '/v1/vehicles';
     }
 

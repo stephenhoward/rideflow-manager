@@ -5,8 +5,9 @@ module.exports = {
       { 
           path: '/', component: require('../vues/root.vue'),
           children: [
-              { path: 'menu', component: require('../vues/main_menu.vue')  }
-              // { path: 'routes', component: rfRoutes },
+              { path: 'menu',     component: require('../vues/main_menu.vue')  },
+              { path: 'routes',   component: require('../vues/routes/routes.vue') },
+              { path: 'vehicles', component: require('../vues/vehicles/vehicles.vue') }
               // { path: 'routes/new', component: rfEditRoute },
               // { path: 'routes/:id/edit', component: rfEditRoute, props: true },
               // { path: 'vehicles', component: rfVehicles },
