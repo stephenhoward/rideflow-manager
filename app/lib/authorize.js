@@ -78,7 +78,7 @@ function refresh_login(timeout) {
             }).done( (data) => {
                 set_token(data);
             }).fail( (xhr) => {
-                var json = JSON.parse(data);
+                var json = JSON.parse(xhr.responseText);
                 unset_token();
             });
         }, timer * 1000 );
