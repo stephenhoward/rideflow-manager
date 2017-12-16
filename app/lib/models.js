@@ -1,4 +1,4 @@
-let Model = require('./model.js');
+let Model = require('./model.js').Model;
 
 
 class Arrival extends Model {
@@ -166,6 +166,10 @@ class RouteSession extends Model {
             "vehicle" : null
         };
 
+    }
+
+    static url() {
+        return '/v1/sessions';
     }
 
     get bearing()    { return this._get('bearing');      }

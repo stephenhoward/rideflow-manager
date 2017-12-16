@@ -5,10 +5,13 @@ module.exports = {
         data: () => {
             return {
                 loading : false,
-                models  : [
-                ],
                 error   : null
             };            
+        },
+        computed: {
+            models() {
+                return this.type().fetch_all();
+            }
         },
         created: function() {
             this.fetchData();
@@ -24,13 +27,7 @@ module.exports = {
                 this.$router.push( this.url() + '/new' );
             },
             fetchData: function() {
-                let defer = $.Deferred();
-                let type  = this.type().all().done( (items) => {
-                    this.models = items;
-                    defer.resolve(items);
-                });
-
-                return defer.promise();
+                this.type().fetch_all();
             }
         }
     },

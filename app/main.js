@@ -1,12 +1,13 @@
-window.Vue       = require('vue');
-window.VueRouter = require('vue-router');
-window.VueI18n   = require('vue-i18n');
+window.Vue    = require('vue');
+let VueRouter = require('vue-router');
+let VueI18n   = require('vue-i18n');
 
 // needed by map.vue, but brunch won't grab it from a .vue file
 window.L      = require('leaflet');
 
 let authorize = require('./lib/authorize.js');
 let App       = require('./vues/app.vue');
+let store     = require('./lib/model.js').store;
 
 window.app = new Vue({
     render: h => h(App),
@@ -16,8 +17,8 @@ window.app = new Vue({
     i18n   : new VueI18n({
         messages : require('./lib/i18n.js').messages,
         locale   : 'en'
-    })
-
+    }),
+    store: store
 });
 
 app.$mount('#rfapp');

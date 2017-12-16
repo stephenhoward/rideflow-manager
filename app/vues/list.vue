@@ -26,18 +26,5 @@
 
     export default {
         mixins: [ ListVueMixin ],
-        created: function() {
-            console.log(this);
-        },
-        mounted: function() {
-            console.log('hi');
-        },
-        i18n: {
-            messages: {
-                en: {
-                    nav_back: 'back'
-                }
-            }
-        }
     };
 </script>

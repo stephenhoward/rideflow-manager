@@ -20,18 +20,24 @@
 
             return {
                 map      : null,
-                routes   : [],
-                sessions : [],
                 markers  : {}
             };
         },
+        computed: {
+            // sessions () {
+            //     return RouteSession.fetch_all();
+            // },
+            routes () {
+                return Route.fetch_all();               
+            }
+        },
         watch: {
-            sessions: {
-                handler: function(newVehicles) {
-                    this.updateVehicles();
-                },
-                deep: true
-            },
+            // sessions: {
+            //     handler: function(newVehicles) {
+            //         this.updateVehicles();
+            //     },
+            //     deep: true
+            // },
             routes: {
 
             }
@@ -43,24 +49,21 @@
         },
         mounted: function() {
 
+            let self = this;
+
             this.$nextTick( () => {
 
-                this.map = L.map('transitmap').setView( config.map.coordinates, config.map.zoom );
+                self.map = L.map('transitmap').setView( config.map.coordinates, config.map.zoom );
 
                 L.tileLayer(config.map.tiles, {
                     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
                     maxZoom: 18,
                     id: config.map.view,
                     accessToken: config.map.token
-                }).addTo(this.map);
+                }).addTo(self.map);
 
-                this.sessions = [ new RouteSession({ location: config.map.coordinates, id: 'test' }) ];
-
-                Route.all().done( (routes) => {
-
-                    self.routes = routes;
-                });
-
+                //RouteSession.fetch_all();
+                Route.fetch_all();
             });
         },
         methods: {

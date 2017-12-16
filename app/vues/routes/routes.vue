@@ -11,6 +11,15 @@
         },
         components: {
             'model-summary': require('./route_summary.vue'),
+        },
+        i18n: {
+            messages: {
+                en: {
+                    title: 'Routes',
+                    add_title: 'Create a Route',
+                    nav_back: 'back'
+                }
+            }
         }
     }
 </script>

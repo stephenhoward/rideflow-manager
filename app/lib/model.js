@@ -1,10 +1,35 @@
-let model_cache = {};
+let Vuex = require('vuex');
+window.Vue.use(Vuex);
+
+
+// store models fetched from the server centrally in a way that vue can notice changes:
+let store =  new Vuex.Store({
+    state: {
+        models: {}
+    },
+    getters: {
+    },
+    mutations: {
+        setList: ( state, options ) => {
+            state.models[ options.type ] = options.list;
+        },
+        addModel: ( state, options ) => {
+            if ( ! state[ options.type ] ) {
+                state[ options.type ] = [];
+            }
+        }
+
+    },
+    actions: {
+
+    }
+});
 
 class Model {
     constructor(properties) {
         this.properties = {};
         for( let k of Object.keys(this.definition()) ) {
-            if ( properties[k] ) {
+            if ( k in properties ) {
                 this.properties[k] = properties[k];
             }
         }
@@ -78,23 +103,26 @@ class Model {
         return defer.promise();
     }
 
-    static all(refresh) {
+    static fetch_all(refresh) {
         var defer = $.Deferred();
 
-        if ( ! this._records || refresh ) {
+        let type = this.name;
 
-            this._records = this.list( this.url() ).done((list) => {
-                this._records = list;
+        if ( ! store.state.models[type] || refresh ) {
+
+            if ( ! store.state.models[type]) {
+
+                store.commit('setList',{ type, list: [] });
+            }
+            this.list( this.url() ).done((list) => {
+                store.commit('setList',{ type, list: list });
                 defer.resolve(list);
             });
         }
-        else {
-            defer.resolve(this._records);
-        }
 
-        return defer.promise();
+        return store.state.models[type];
     }
 
 }
 
-module.exports = Model;
+module.exports = { Model, store };
