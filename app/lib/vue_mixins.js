@@ -39,12 +39,12 @@ module.exports = {
             };
         },
         created: function() {
-            this.fetchData();
+            this.fetchData(this.id);
         },
         methods: {
             fetchData: function(id) {
                 if ( id ) {
-                    this.$models(this.type()).load(this.id).done( (model) => {
+                    this.$models(this.type()).get(this.id).done( (model) => {
                         this.model = model;
                     });
                 }
@@ -59,6 +59,10 @@ module.exports = {
                     self.$models( this.type() ).add(this.model);
                     self.$router.go(-1);
                 });
+            },
+            cancelEdit: function() {
+                this.model.revert();
+                this.$router.go(-1);
             }
         }
     }

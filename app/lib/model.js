@@ -2,6 +2,8 @@
 class Model {
     constructor(properties) {
         this.properties = {};
+        this.dirty      = {};
+
         for( let k of Object.keys(this.definition()) ) {
             if ( k in properties ) {
                 this.properties[k] = properties[k];
@@ -15,7 +17,13 @@ class Model {
 
     _set(k,v) {
         if ( k in this.definition() ) {
-            this.properties[k] = v;
+            if ( this.properties[k] !== v ) {
+
+                if ( ! k in this.dirty ) {
+                    this.dirty[k] = this.properties[k];
+                }
+                this.properties[k] = v;
+            }
 
             return this.properties[k];
         }
@@ -29,11 +37,24 @@ class Model {
         return null;
     }
 
+    revert() {
+        for( let k in this.dirty ) {
+            this.properties[k] = this.dirty[k];
+            delete dirty[k];
+        }
+    }
+
     save() {
-        var defer = $.Deferred();
-        var self  = this;
+        let self  = this;
+        let defer = $.Deferred();
+        let url   = self.constructor.url();
+
+        if ( self.id ) {
+            url = url + '/' + self.id;
+        }
+
         $.ajax({
-            url         : self.constructor.url(),
+            url         : url,
             type        : 'POST',
             dataType    : 'json',
             contentType : 'application/json; charset=utf-8',
@@ -42,6 +63,7 @@ class Model {
             for( let k of Object.keys(json) ) {
                 self._set(k,json[k]);
             }
+            self.dirty = {};
             defer.resolve(self);
         });
 

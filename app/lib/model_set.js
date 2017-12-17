@@ -48,7 +48,7 @@ class ModelSet {
     get(id) {
         var defer = $.Deferred();
 
-        if ( this.type.definition().id ) {
+        //if ( this.type.definition().id ) {
 
             if ( this.models[id] ) {
                 defer.resolve( this.models[id] );
@@ -59,11 +59,11 @@ class ModelSet {
                     this.models[id] = new this.type(json);
                     defer.resolve( this.models[id] );
                 });
-        }
-        else {
-            console.log( '"' + this.type.name + '" has no id to load by.')
-            defer.reject();
-        }
+        //}
+        //else {
+        //    console.log( '"' + this.type.name + '" has no id to load by.')
+        //    defer.reject();
+        //}
 
         return defer.promise();
     }
