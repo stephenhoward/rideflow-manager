@@ -6,8 +6,7 @@
         extends: ListVue,
 
         methods: {
-            type: () => { return Vehicle },
-            url:  () => { return '/v1/vehicles' }
+            type: () => { return 'Vehicle' },
         },
         components: {
             'model-summary': require('./vehicle_summary.vue')

@@ -6,8 +6,10 @@ let VueI18n   = require('vue-i18n');
 window.L      = require('leaflet');
 
 let authorize = require('./lib/authorize.js');
+let ModelSets = require('./lib/model_set.js');
 let App       = require('./vues/app.vue');
-let store     = require('./lib/model.js').store;
+
+Vue.use(ModelSets);
 
 window.app = new Vue({
     render: h => h(App),
@@ -18,7 +20,7 @@ window.app = new Vue({
         messages : require('./lib/i18n.js').messages,
         locale   : 'en'
     }),
-    store: store
+    models: new ModelSets()
 });
 
 app.$mount('#rfapp');

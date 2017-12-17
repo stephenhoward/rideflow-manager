@@ -1,17 +1,12 @@
-
 module.exports = {
 
     ListVueMixin: {
         data: () => {
             return {
                 loading : false,
-                error   : null
+                error   : null,
+                models  : []
             };            
-        },
-        computed: {
-            models() {
-                return this.type().fetch_all();
-            }
         },
         created: function() {
             this.fetchData();
@@ -21,13 +16,15 @@ module.exports = {
         },
         methods: {
             type: function() { return null },
-            url:  function() { return ''   },
 
             add: function() {
-                this.$router.push( this.url() + '/new' );
+                let currentPath = this.$router.currentRoute.path;
+                this.$router.push(  currentPath + '/new' );
             },
             fetchData: function() {
-                this.type().fetch_all();
+                this.$models(this.type()).list().done( (models) => {
+                    this.models = models
+                });
             }
         }
     },
@@ -44,34 +41,24 @@ module.exports = {
         created: function() {
             this.fetchData();
         },
-        watch: {
-           '$route': 'fetchData' 
-        },
         methods: {
-            fetchData: function() {
-                let defer = $.Deferred();
-                if ( ! this.model ) {
-                    let type = this.type();
-                    this.model = new type({});
-                    if ( this.id ) {
-                        type.load( '/v1' + this.url() + '/'+this.id).done( (model) => {
-                            this.model = model;
-                            defer.resolve(this.model);
-                        });
-                    }
+            fetchData: function(id) {
+                if ( id ) {
+                    this.$models(this.type()).load(this.id).done( (model) => {
+                        this.model = model;
+                    });
                 }
                 else {
-                    defer.resolve(this.model);
+                    this.model = new this.$new_model( this.type() );
                 }
-                return defer.promise();
             },
             saveData: function() {
-                if ( this.model.id ) {
-                    this.model.save( '/v1' + this.url() + '/' + this.model.id );
-                }
-                else {
-                    this.model.save( '/v1' + this.url() );
-                }
+                let self = this;
+
+                this.model.save().done( () => {
+                    self.$models( this.type() ).add(this.model);
+                    self.$router.go(-1);
+                });
             }
         }
     }

@@ -12,24 +12,15 @@
 
 <script>
     const config     = require('../lib/config.js');
-    let RouteSession = require('../lib/models.js').RouteSession;
-    let Route        = require('../lib/models.js').Route;
 
     export default {
         data: () => {
 
             return {
                 map      : null,
-                markers  : {}
+                markers  : {},
+                routes   : []
             };
-        },
-        computed: {
-            // sessions () {
-            //     return RouteSession.fetch_all();
-            // },
-            routes () {
-                return Route.fetch_all();               
-            }
         },
         watch: {
             // sessions: {
@@ -38,14 +29,14 @@
             //     },
             //     deep: true
             // },
-            routes: {
+            // routes: {
 
-            }
+            // }
         },
         created: function() {
-            var self = this;
+            let self = this;
 
-
+            self.$models('Route').list().done((routes) => { self.routes = routes });
         },
         mounted: function() {
 
@@ -61,9 +52,6 @@
                     id: config.map.view,
                     accessToken: config.map.token
                 }).addTo(self.map);
-
-                //RouteSession.fetch_all();
-                Route.fetch_all();
             });
         },
         methods: {

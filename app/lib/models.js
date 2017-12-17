@@ -1,4 +1,4 @@
-let Model = require('./model.js').Model;
+let Model = require('./model.js');
 
 
 class Arrival extends Model {
