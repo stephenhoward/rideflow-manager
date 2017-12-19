@@ -1,6 +1,6 @@
 <template>
     <li class="vehicle-summary">
-        <router-link :to="'/vehicles/' + model.id + '/edit'">{{ model.name }}</router-link>
+        <router-link :to="'/vehicles/' + model.id ">{{ model.name }}</router-link>
     </li>
 </template>
 

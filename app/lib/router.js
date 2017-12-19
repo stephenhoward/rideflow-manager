@@ -7,12 +7,13 @@ module.exports = {
           children: [
               { path: 'menu',     component: require('../vues/main_menu.vue')  },
               { path: 'routes',   component: require('../vues/routes/routes.vue') },
-              { path: 'vehicles', component: require('../vues/vehicles/vehicles.vue') },
-              { path: 'vehicles/new', component: require('../vues/vehicles/vehicle_edit.vue') },
+
+              { path: 'vehicles',          component: require('../vues/vehicles/vehicles.vue') },
+              { path: 'vehicles/new',      component: require('../vues/vehicles/vehicle_edit.vue') },
+              { path: 'vehicles/:id',      component: require('../vues/vehicles/vehicle.vue'), props: true },
               { path: 'vehicles/:id/edit', component: require('../vues/vehicles/vehicle_edit.vue'), props: true }
               // { path: 'routes/new', component: rfEditRoute },
               // { path: 'routes/:id/edit', component: rfEditRoute, props: true },
-              // { path: 'vehicles/:id', component: rfVehicle, props: true },
               // { path: 'drivers',  component: Drivers },
               // { path: 'rides',    component: Rides }
           ]

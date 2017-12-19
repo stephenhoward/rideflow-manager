@@ -19,10 +19,20 @@ class Model {
         if ( k in this.definition() ) {
             if ( this.properties[k] !== v ) {
 
+                // capture the original value
                 if ( ! k in this.dirty ) {
+
                     this.dirty[k] = this.properties[k];
                 }
+                // looks like we're reverting to the original value
+                else if ( this.dirty[k] === v ) {
+
+                    delete this.dirty[k];
+                }
+
                 this.properties[k] = v;
+
+                $(this).trigger('model-changed');
             }
 
             return this.properties[k];
@@ -38,9 +48,15 @@ class Model {
     }
 
     revert() {
+        let keys_changed = Object.keys( this.dirty );
+
         for( let k in this.dirty ) {
             this.properties[k] = this.dirty[k];
             delete dirty[k];
+        }
+
+        if ( keys_changed ) {
+            $(this).trigger('model-changed');
         }
     }
 
@@ -66,6 +82,32 @@ class Model {
             self.dirty = {};
             defer.resolve(self);
         });
+
+        return defer.promise();
+    }
+
+    delete() {
+        let self = this;
+        let defer = $.Deferred();
+        let url = self.constructor.url() + '/' + self.id;
+
+        if ( ! self.id ) {
+            defer.reject();
+        }
+        else {
+
+            $.ajax({
+                url         : url,
+                type        : 'DELETE',
+                dataType    : 'json',
+            }).done( (json) => {
+                $(self).trigger('model-deleted');
+                defer.resolve(self);
+            }).fail( (json) => {
+                defer.reject(json);
+            });
+
+        }
 
         return defer.promise();
     }

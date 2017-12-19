@@ -1,28 +1,41 @@
-<i18n>
-{
-    en: {
-        name: 'vehicle identifier',
-        create: 'add vehicle',
-        update: 'save changes'
-    }
-}
-</i18n>
-
 <template>
-    <div class="edit_vehicle">
-    <input type="text" v-model="model.name" v-bind:placeholder="$t('name')">
-    <button v-on:click="saveData" type="button" >{{ $t("create") }}</button>
+    <div class="vehicle">
+        <a href="#" v-on:click="goBack">&lt; {{ $t("nav_back") }}</a>
+        <h3>{{ model.name }}</h3>
+        <button v-on:click="editItem" type="button" >{{ $t("edit_me") }}</button>
+        <button v-on:click="deleteItem" type="button" >{{ $t("delete_me") }}</button>
     </div>
 </template>
 
 <script>
-    import EditVueMixin from '../js/lib/vue_mixins';
-    export default {
-        mixins: [ EditVueMixin ],
+    let ModelVueMixin = require('../../lib/vue_mixins.js').ModelVueMixin;
 
+    export default {
+        mixins: [ ModelVueMixin ],
         methods: {
-            type: () => { return Vehicle },
-            url:  () => { return '/vehicles' }
+            type: () => { return 'Vehicle' },
+            editItem() {
+                this.$router.push('/vehicles/' + this.model.id + '/edit' );
+            },
+            goBack() {
+                this.$router.go(-1);
+            },
+            deleteItem() {
+                let self = this;
+
+                this.model.delete().done( () => {
+                    self.$router.go(-1);
+                })
+            }
+        },
+        i18n: {
+            messages: {
+                en: {
+                    edit_me: 'Edit Vehicle',
+                    delete_me: 'Delete Vehicle',
+                    nav_back: 'back'
+                }
+            }
         }
     };
 </script>

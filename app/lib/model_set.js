@@ -46,7 +46,8 @@ class ModelSet {
     }
 
     get(id) {
-        var defer = $.Deferred();
+        let self  = this;
+        let defer = $.Deferred();
 
         //if ( this.type.definition().id ) {
 
@@ -56,7 +57,7 @@ class ModelSet {
 
             $.getJSON( this.type.url() + '/' + id )
                 .done( (json) => {
-                    this.models[id] = new this.type(json);
+                    self.models[id] = self._new(json);
                     defer.resolve( this.models[id] );
                 });
         //}
@@ -69,7 +70,7 @@ class ModelSet {
     }
 
     list(refresh) {
-        let self = this;
+        let self  = this;
         let defer = $.Deferred();
 
         if ( Object.keys( this.models ).length && ! refresh ) {
@@ -80,7 +81,7 @@ class ModelSet {
             .done( (json) => {
 
                 $.each(json, (i,item) => {
-                    self.models[ item.id ] = new this.type(item);
+                    self.models[ item.id ] = self._new(item);
                 })
 
                 defer.resolve( Object.values( this.models ) );
@@ -97,6 +98,23 @@ class ModelSet {
         }
 
         this.models[ model.id ] = model;
+    }
+
+    _new(item) {
+        let self  = this;
+        let model = new this.type(item);
+
+        $(model)
+            .on('model-deleted', function() {
+                $(this).off();
+
+                delete self.models[ this.id ];
+            })
+            .on('model-updated', function() {
+                // probably useful in the future
+            });
+
+        return model;
     }
 };
 
