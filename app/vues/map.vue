@@ -7,19 +7,26 @@
 </style>
 
 <template>
-    <main id="transitmap"></main>
+    <main id="transitmap">
+        <div class="edit_stop template">
+            <input >
+            <button>Ok</button>
+            <button>Cancel</button>
+        </div>
+    </main>
 </template>
 
 <script>
     const config     = require('../lib/config.js');
+    const StopMarker = require('../lib/map/stop_marker.js');
 
     export default {
         data: () => {
 
             return {
-                map      : null,
-                markers  : {},
-                routes   : []
+                map    : null,
+                stops  : {},
+                routes : {}
             };
         },
         watch: {
@@ -29,14 +36,26 @@
             //     },
             //     deep: true
             // },
-            // routes: {
+            stops: {
 
-            // }
+
+            }
         },
         created: function() {
             let self = this;
 
-            self.$models('Route').list().done((routes) => { self.routes = routes });
+            self.$models('Route').list().done((routes) => {
+                self.routes = {};
+                for( let i = 0; i < routes.length; i++ ) {
+                    self.routes[ routes[i].id ] = routes[i];
+                }
+            });
+            self.$models('Stop').list().done((stops) => {
+                self.stops = {};
+                for( let i = 0; i < stops.length; i++ ) {
+                    self.stops[ stops[i].id ] = stops[i];
+                }
+            });
         },
         mounted: function() {
 
@@ -52,6 +71,11 @@
                     id: config.map.view,
                     accessToken: config.map.token
                 }).addTo(self.map);
+
+                self.map.on('click', (e) => {
+
+                    new StopMarker(self.map,e.latlng);
+                });
             });
         },
         methods: {

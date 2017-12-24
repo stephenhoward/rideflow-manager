@@ -11,6 +11,7 @@ body {
     padding: 0;
     width: 100%;
     display: grid;
+    height: 100%;
     min-height: 100%;
     div.login, div.forgot_password {
         padding: 20px 15px;

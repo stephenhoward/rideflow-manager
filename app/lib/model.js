@@ -307,6 +307,10 @@ class ModelList {
 
     _index_items() {
 
+        return;
+        // this indexing interacts badly with trying to attach
+        // jquery custom events to an object.
+
         for( let i=0; i<this.items.length; i++) {
 
             this[i] = this.items[i];

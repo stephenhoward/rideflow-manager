@@ -5,15 +5,17 @@ module.exports = {
       { 
           path: '/', component: require('../vues/root.vue'),
           children: [
-              { path: 'menu',     component: require('../vues/main_menu.vue')  },
-              { path: 'routes',   component: require('../vues/routes/routes.vue') },
+              { path: 'menu',            component: require('../vues/main_menu.vue')  },
+              { path: 'routes',          component: require('../vues/routes/routes.vue') },
+              { path: 'routes/new',      component: require('../vues/routes/route_edit.vue') },
+              { path: 'routes/:id',      component: require('../vues/routes/route.vue'), props: true },
+              { path: 'routes/:id/edit', component: require('../vues/routes/route_edit.vue'), props: true },
 
               { path: 'vehicles',          component: require('../vues/vehicles/vehicles.vue') },
               { path: 'vehicles/new',      component: require('../vues/vehicles/vehicle_edit.vue') },
               { path: 'vehicles/:id',      component: require('../vues/vehicles/vehicle.vue'), props: true },
               { path: 'vehicles/:id/edit', component: require('../vues/vehicles/vehicle_edit.vue'), props: true }
               // { path: 'routes/new', component: rfEditRoute },
-              // { path: 'routes/:id/edit', component: rfEditRoute, props: true },
               // { path: 'drivers',  component: Drivers },
               // { path: 'rides',    component: Rides }
           ]

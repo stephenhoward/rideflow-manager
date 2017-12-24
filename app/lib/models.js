@@ -223,6 +223,10 @@ class Stop extends Model {
 
     }
 
+    static url() {
+        return '/v1/stops';
+    }
+
     get arrival()    { return this._get('arrival');      }
     set arrival(val) { return this._set('arrival',val);  }
     

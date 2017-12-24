@@ -1,6 +1,6 @@
 <template>
-    <li class="route-summary">
-        <router-link :to="'/routes/' + model.id">{{ model.name }}</router-link>
+    <li class="stop-summary">
+        {{ model.name }}
     </li>
 </template>
 
