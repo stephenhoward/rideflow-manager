@@ -11,6 +11,10 @@ module.exports = {
               { path: 'routes/:id',      component: require('../vues/routes/route.vue'), props: true },
               { path: 'routes/:id/edit', component: require('../vues/routes/route_edit.vue'), props: true },
 
+              { path: 'stops/new',      component: require('../vues/stops/stop_edit.vue'), name: 'new_stop', props: true },
+              { path: 'stops/:id',      component: require('../vues/stops/stop.vue'), name: 'stop_details', props: true },
+              { path: 'stops/:id/edit', component: require('../vues/stops/stop.vue'), props: true },
+
               { path: 'vehicles',          component: require('../vues/vehicles/vehicles.vue') },
               { path: 'vehicles/new',      component: require('../vues/vehicles/vehicle_edit.vue') },
               { path: 'vehicles/:id',      component: require('../vues/vehicles/vehicle.vue'), props: true },

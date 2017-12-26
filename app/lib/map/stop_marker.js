@@ -32,26 +32,40 @@ class StopMarker {
         this.map    = map;
         this.marker = L.marker(location,{draggable: true}).addTo(this.map);
 
+        let self = this;
 
-        if ( ! this.stop.id ) {
-            this.editPopup().showPopup();
+        this.on('moveend', (e) => {
+
+            self.moveTo( self.marker.getLatLng() );
+        });
+
+    }
+
+    get id() {
+        return this.stop.id || null;
+    }
+
+    remove() {
+        this.marker.remove();
+    }
+
+    on(event,handler) {
+
+        this.marker.on(event,handler);
+
+        return this;
+    }
+
+    moveTo(latlng) {
+
+        this.marker.setLatLng(latlng);
+        this.stop.location = [ latlng.lat, latlng.lng ];
+
+        if ( this.stop.id ) {
+            this.stop.save();
         }
     }
 
-    editPopup() {
-        this.marker.bindPopup('<p>edit</p>');
-        return this;
-    }
-
-    detailPopup() {
-        this.marker.bindPopup('<p>view</p>');
-        return this;
-    }
-
-    showPopup() {
-        this.marker.openPopup();
-        return this;
-    }
 }
 
 module.exports = StopMarker;

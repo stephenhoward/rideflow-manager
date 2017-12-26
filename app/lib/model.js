@@ -1,6 +1,9 @@
+const Emitter = require('component-emitter');
 
 class Model {
     constructor(properties) {
+        Emitter(this);
+
         let self        = this;
         this.properties = {};
         this.dirty      = {};
@@ -14,7 +17,7 @@ class Model {
                 if ( this.definition()[k] instanceof Array ) {
 
                     v = new ModelList( v );
-                    $(v).on('list-replace', (new_list) => {
+                    v.on('list-replace', (new_list) => {
                         self._set_list(k,new_list);
                     });
                 }
@@ -40,7 +43,7 @@ class Model {
                 this._mark_dirty( k, v, (a,b) => { return a === b } );
                 this.properties[k] = v;
 
-                $(this).trigger('model-changed');
+                this.emit('model-changed');
             }
 
             return this.properties[k];
@@ -55,17 +58,17 @@ class Model {
 
             this._mark_dirty( k, v, (a,b) => { return a.eq(b) } );
 
-            if ( ! v instanceof ModelList ) {
+            if ( ! ( v instanceof ModelList ) ) {
                 v = new ModelList(v);
             }
 
-            $(v).on('list-replace', (new_list) => {
+            v.on('list-replace', (new_list) => {
                 self._set_list(k,new_list);
             });
 
             this.properties[k] = v;
 
-            $(this).trigger('model-changed');
+            this.emit('model-changed');
         }
     }
 
@@ -78,7 +81,7 @@ class Model {
 
     _mark_dirty(k,v,eq) {
                 // capture the original value
-                if ( ! k in this.dirty ) {
+                if ( ! ( k in this.dirty ) ) {
 
                     this.dirty[k] = this.properties[k];
                 }
@@ -98,7 +101,7 @@ class Model {
         }
 
         if ( keys_changed ) {
-            $(this).trigger('model-changed');
+            this.emit('model-changed');
         }
     }
 
@@ -143,7 +146,7 @@ class Model {
                 type        : 'DELETE',
                 dataType    : 'json',
             }).done( (json) => {
-                $(self).trigger('model-deleted');
+                self.emit('model-deleted');
                 defer.resolve(self);
             }).fail( (json) => {
                 defer.reject(json);
@@ -200,6 +203,7 @@ class Model {
 
 class ModelList {
     constructor(arr) {
+        Emitter(this);
 
         this.items  = [];
 
@@ -296,7 +300,7 @@ class ModelList {
         let result = mutate(arr);
         let update = new ModelList(arr);
 
-        $(this).trigger('list-replace', update );
+        this.emit('list-replace', update );
 
         return result ? result : update;
     }
@@ -306,10 +310,6 @@ class ModelList {
     }
 
     _index_items() {
-
-        return;
-        // this indexing interacts badly with trying to attach
-        // jquery custom events to an object.
 
         for( let i=0; i<this.items.length; i++) {
 

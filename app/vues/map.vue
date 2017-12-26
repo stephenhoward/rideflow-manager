@@ -24,22 +24,13 @@
         data: () => {
 
             return {
-                map    : null,
-                stops  : {},
-                routes : {}
+                map     : null,
+                stops   : [],
+                routes  : {},
+                markers : {}
             };
         },
         watch: {
-            // sessions: {
-            //     handler: function(newVehicles) {
-            //         this.updateVehicles();
-            //     },
-            //     deep: true
-            // },
-            stops: {
-
-
-            }
         },
         created: function() {
             let self = this;
@@ -72,26 +63,39 @@
                     accessToken: config.map.token
                 }).addTo(self.map);
 
-                self.map.on('click', (e) => {
-
-                    new StopMarker(self.map,e.latlng);
-                });
+                self.map.on('click', (e) => { self.newStop(e.latlng); });
             });
         },
         methods: {
-            updateVehicles: function() {
-                let self = this;
+            
+            newStop(latlng) {
 
-                if ( ! self.map ) {
-                    return;
+                if ( this.current_marker && ! this.current_marker.id ) {
+
+                    this.current_marker.moveTo(latlng);
+                }
+                else {
+
+                    let marker = new StopMarker( this.map, latlng );
+
+                    this.current_marker = marker;
+
+                    marker
+                        .on('click',(e) => {
+                            if ( marker.id ) {
+
+                                this.$router.push({ name: 'stop_details', params: { id:  marker.id } });
+                            }
+                        })
+                        .on('remove', (e) => {
+                            this.current_marker = null;
+                        });
                 }
 
-                $.each(self.sessions,function(i,vehicle) {
-                    if ( self.markers[ vehicle.id ] ) {
-                        self.markers[ vehicle.id ].setLatLng( vehicle.location );
-                    }
-                    else {
-                        self.markers[ vehicle.id ] = L.marker( vehicle.location ).addTo(self.map);
+                this.$router.push({
+                    name: 'new_stop',
+                    params: {
+                        marker: this.current_marker
                     }
                 });
             }

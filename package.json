@@ -25,6 +25,7 @@
     "vue-router": "3.0.1",
     "vue-i18n": "7.3.2",
     "vue-template-compiler": "^2.3.3",
+    "component-emitter": "1.2.1",
     "leaflet": "1.2.0"
   },
   "devDependencies": {
