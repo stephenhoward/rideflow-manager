@@ -12,6 +12,12 @@ module.exports = {
             extractCSS: true,
             out: './public/app.css'
         },
+        sass: {
+            options:  {
+                allowCache: true,
+                sourceMapEmbed: true
+            }
+        },
         copycat: {
             "images": ["node_modules/leaflet/dist/images"],
             onlyChanged: true
