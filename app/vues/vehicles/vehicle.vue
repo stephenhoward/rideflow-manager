@@ -1,10 +1,10 @@
 <template>
-    <div class="vehicle">
+    <aside class="vehicle">
         <a href="#" v-on:click="goBack">&lt; {{ $t("nav_back") }}</a>
         <h3>{{ model.name }}</h3>
         <button v-on:click="editItem" type="button" >{{ $t("edit_me") }}</button>
         <button v-on:click="deleteItem" type="button" >{{ $t("delete_me") }}</button>
-    </div>
+    </aside>
 </template>
 
 <script>

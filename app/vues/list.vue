@@ -10,7 +10,7 @@
 </style>
 
 <template>
-    <div>
+    <aside>
         <router-link to="/menu">&lt; {{ $t("nav_back") }}</router-link>
         <h2>{{ $t( "title" ) }}</h2>
 
@@ -18,7 +18,7 @@
         <ul>
             <model-summary v-for="model in models" :key="model.id" :model="model"></model-summary>
         </ul>    
-    </div>
+    </aside>
 </template>
 
 <script>

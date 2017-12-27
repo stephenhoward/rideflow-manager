@@ -3,14 +3,12 @@
         display: grid;
         align-self: stretch;
         justify-self: stretch;
-    }
-    aside {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        z-index: 5;
 
-        button.toggle {
+        & > button.toggle {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 5;
             padding: 4px 8px;
             box-shadow: 5px 5px 5px rgba(100,100,100,.5);
             color: white;
@@ -23,11 +21,12 @@
             &:focus {
                 outline: none;
             }
-            & + * {
-                clear: right;
-            }
         }
-        &.open {
+        aside {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 5;
             margin: 15px;
             padding: 10px;
             min-width: 200px;
@@ -46,38 +45,18 @@
 
 <template>
     <div class="root">
-        <aside>
-            <button class="toggle" v-on:click="toggleOverlay">+</button>
-            <router-view></router-view>
-        </aside>
-
+        <router-view></router-view>
         <routemap></routemap>
     </div>
 </template>
 
 <script>
-    Vue.component('routemap', require('./map.vue') );
     export default {
         data: () => {
             return {};
         },
-        mounted: function () {
-            this.toggleOverlay();
-        },
-        methods: {
-            toggleOverlay: function() {
-                let route = window.app.$router.currentRoute;
-
-                if ( ! route || route.path == '/' ) {
-                    window.app.$router.push('/menu');
-                    $('div.root aside').addClass('open');
-                }
-                else {
-                    window.app.$router.push('/');                    
-                    $('div.root aside').removeClass('open');
-                }
-
-            }
+        components: {
+            routemap: require('./map.vue')
         }
     }
 </script>

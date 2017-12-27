@@ -1,5 +1,5 @@
 <template>
-    <div class="route">
+    <aside class="route">
         <a href="#" v-on:click="goBack">&lt; {{ $t("nav_back") }}</a>
         <h3>{{ model.name }}</h3>
         <ul>
@@ -9,7 +9,7 @@
         <button v-on:click="addStop" type="button" >{{ $t("add_stop") }}</button>
         <button v-on:click="editItem" type="button" >{{ $t("edit_me") }}</button>
         <button v-on:click="deleteItem" type="button" >{{ $t("delete_me") }}</button>
-    </div>
+    </aside>
 </template>
 
 <script>

@@ -1,10 +1,18 @@
 
+let MenuLink = {
+  render: (_c) => { return _c('router-link',{ attrs: { tag: 'button', class: "toggle", to: '/menu' } },'+'); },
+  data: () => {
+    return {};
+  }
+};
+
 module.exports = {
 
      routes : [
       { 
           path: '/', component: require('../vues/root.vue'),
           children: [
+              { path: '',                component: MenuLink },
               { path: 'menu',            component: require('../vues/main_menu.vue')  },
               { path: 'routes',          component: require('../vues/routes/routes.vue') },
               { path: 'routes/new',      component: require('../vues/routes/route_edit.vue') },

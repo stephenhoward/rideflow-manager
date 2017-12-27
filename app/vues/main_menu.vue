@@ -10,6 +10,8 @@
 </style>
 
 <template>
+    <aside>
+    <router-link tag="button" to="/" class="toggle">X</router-link>
     <nav>
         <li><router-link to="/routes">{{   $t( "routes.nav"   ) }}</router-link></li>
         <li><router-link to="/vehicles">{{ $t( "vehicles.nav" ) }}</router-link></li>
@@ -17,6 +19,7 @@
         <li><router-link to="/rides">{{    $t( "rides.nav"    ) }}</router-link></li>
         <li><a v-on:click="doLogout">{{ $t("logout") }}</a></li>
     </nav>
+    </aside>
 </template>
 
 <script>

@@ -1,9 +1,9 @@
 <template>
-    <div class="edit_stop">
+    <aside class="edit_stop">
         <input type="text" v-model="model.name" v-bind:placeholder="$t('stop_name')">
         <button v-on:click="saveData" type="button" >{{ $t("stop_create") }}</button>
         <button v-on:click="cancelEdit" type="button">{{ $t("cancel") }}</button>
-    </div>
+    </aside>
 </template>
 
 <script>
