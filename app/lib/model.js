@@ -97,7 +97,7 @@ class Model {
 
         for( let k in this.dirty ) {
             this.properties[k] = this.dirty[k];
-            delete dirty[k];
+            delete this.dirty[k];
         }
 
         if ( keys_changed ) {

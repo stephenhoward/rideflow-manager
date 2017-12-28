@@ -47,6 +47,34 @@ body {
         }
 
     }
+    aside.editor {
+        h2 {
+            position: relative;
+            font-size: 14pt;
+            span.icon {
+                position: absolute;
+                top: 3px;
+                left: 4px;
+                pointer-events: none;
+            }
+            input {
+                width: 100%;
+                font-size: 12pt;
+                padding-left: 24px;
+            }
+        }
+    }
+}
+
+div.button-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-content: center;
+    button {
+        font-size: 10pt;
+    }
 }
 </style>
 

@@ -1,8 +1,13 @@
 <template>
-    <aside class="edit_route">
-        <input type="text" v-model="model.name" v-bind:placeholder="$t('route_name')">
-        <button v-on:click="saveData" type="button" >{{ $t("route_create") }}</button>
-        <button v-on:click="cancelEdit" type="button">{{ $t("cancel") }}</button>
+    <aside class="editor edit_route">
+        <h2>
+            <span class="icon la la-map" aria-hidden="true"></span>
+            <input type="text" v-model="model.name" v-bind:placeholder=" model.id ? $t('route_name') : $t('new_route_name') ">
+        </h2>
+        <div class="button-group">
+            <button v-on:click="saveData" type="button" >{{ model.id ? $t("route_save") : $t("route_create") }}</button>
+            <button v-on:click="cancelEdit" type="button">{{ $t("cancel") }}</button>
+        </div>
     </aside>
 </template>
 
@@ -17,8 +22,10 @@
         i18n: {
             messages: {
                 en: {
-                    vehicle_name: 'Route Name',
-                    vehicle_create: 'Create Route',
+                    route_name: 'Route Name',
+                    new_route_name: 'New Route Name',
+                    route_create: 'Create Route',
+                    route_save: 'Save',
                     cancel: 'Cancel'
                 }
             }
