@@ -6,15 +6,16 @@
 
         & > button.toggle {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 10px;
+            right: 10px;
             z-index: 5;
-            padding: 4px 8px;
-            box-shadow: 5px 5px 5px rgba(100,100,100,.5);
+            padding: 6px;
             color: white;
             border: none;
+            border: 1px solid rgba(0,0,0,0.2);
+            background-clip: padding-box;
             background-color: #fa6;
-            border-radius: 15px;
+            border-radius: 6px;
             font-size: 14pt;
             font-weight: 700;
             float: right;
@@ -24,16 +25,16 @@
         }
         aside {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 0px;
+            right: 0px;
             z-index: 5;
-            margin: 15px;
             padding: 10px;
             min-width: 200px;
-            box-shadow: 5px 5px 5px rgba(100,100,100,.5);
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            background-color: white;
+            height: 100%;
+            background-clip: padding-box;
+//            border-radius: 6px;
+            border-left: 2px solid rgba(0,0,0,0.2);
+            background-color: rgba(255,255,255,0.85);
             button.toggle {
                 color: #aaa;
                 box-shadow: none;

@@ -1,6 +1,6 @@
 
 let MenuLink = {
-  render: (_c) => { return _c('router-link',{ attrs: { tag: 'button', class: "toggle", to: '/menu' } },'+'); },
+  render: (_c) => { return _c('router-link',{ attrs: { tag: 'button', class: "toggle la la-navicon", to: '/menu' } },[ _c('span',{ attrs: { class: 'sr-only' } },'menu') ] ); },
   data: () => {
     return {};
   }

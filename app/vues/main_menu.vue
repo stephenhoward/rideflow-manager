@@ -1,4 +1,13 @@
 <style lang="sass" scoped>
+    button.toggle {
+        float: right;
+        & + * {
+            clear: both;
+        }
+        border: none;
+        padding: 6px;
+        background: none;
+    }
     nav {
         list-style-type: none;
         font-size: 12pt;
@@ -11,7 +20,7 @@
 
 <template>
     <aside>
-    <router-link tag="button" to="/" class="toggle">X</router-link>
+    <router-link tag="button" to="/" class="toggle la la-remove"><span class="sr-only">close menu</span></router-link>
     <nav>
         <li><router-link to="/routes">{{   $t( "routes.nav"   ) }}</router-link></li>
         <li><router-link to="/vehicles">{{ $t( "vehicles.nav" ) }}</router-link></li>
