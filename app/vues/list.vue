@@ -1,20 +1,35 @@
 <style lang="sass" scoped>
-    ul {
-        list-style-type: none;
-        font-size: 12pt;
-        li {
-            padding: 3px 0;
-            margin: 6px 0;            
+    aside {
+
+        ul {
+            list-style-type: none;
+            font-size: 12pt;
+            margin: 15px -10px;
+            padding: 0;
+            li {
+                padding: 6px 10px;
+                margin: 6px 0;            
+                cursor: pointer;
+                border-top: 1px solid #ddd;
+                &:last-child {
+                    border-bottom: 1px solid #ddd;
+                }
+                &:hover {
+                    background: rgba(200,200,200,.3);
+                }
+            }
         }
     }
 </style>
 
 <template>
     <aside>
-        <router-link to="/menu">&lt; {{ $t("nav_back") }}</router-link>
         <h2>{{ $t( "title" ) }}</h2>
+        <div class="nav button-group">
+            <router-link to="/menu" tag="button" class="back"><span class="la la-angle-left"></span> {{ $t("nav_back") }}</router-link>
+            <button v-on:click="add" v-bind:title="$t('add_title')"type="button"><span class="la la-plus"></span></button>
+        </div>
 
-        <button v-on:click="add" v-bind:title="$t('add_title')"type="button">+</button>
         <ul>
             <model-summary v-for="model in models" :key="model.id" :model="model"></model-summary>
         </ul>    

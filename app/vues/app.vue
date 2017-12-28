@@ -18,7 +18,11 @@ html {
     margin: 0;
     padding: 0;
 }
+* {
+    box-sizing: border-box;
+}
 body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -46,6 +50,41 @@ body {
             justify-self: right;
         }
 
+    }
+    aside {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        & > * {
+            order: 2;
+        }
+        span.la {
+            font-size: 14pt;
+        }
+        div.nav {
+            order: 0;
+            width: 100%;
+            button {
+                color: #f70;
+                font-size: 10pt;
+                border: 0;
+                background: none;
+                padding: 3px 7px;
+                & > * {
+                    vertical-align: text-top;
+                    margin-right: -8px;
+                }
+                &.back {
+                    margin-left: -7px;
+                }
+            }
+        }
+        h2 {
+            order: 1;
+            font-weight: 500;
+            font-size: 18pt;
+            margin: 15px 0 5px 0;
+        }
     }
     aside.editor {
         h2 {

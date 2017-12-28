@@ -16,7 +16,7 @@
                 en: {
                     title: 'Routes',
                     add_title: 'Create a Route',
-                    nav_back: 'back'
+                    nav_back: 'Back'
                 }
             }
         }

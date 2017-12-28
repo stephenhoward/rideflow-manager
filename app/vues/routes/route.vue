@@ -1,13 +1,23 @@
+<style lang="sass" scoped>
+ul {
+    list-style-type: none;
+    margin: 10px 0;
+    padding: 0;    
+}
+</style>
+
 <template>
     <aside class="route">
-        <a href="#" v-on:click="goBack">&lt; {{ $t("nav_back") }}</a>
-        <h3>{{ model.name }}</h3>
+        <div class="nav button-group">
+            <button v-on:click="goBack" class="back"><span class="la la-angle-left"></span> {{ $t("nav_back") }}</button>
+            <button v-on:click="editItem" type="button" >{{ $t("edit_me") }}</button>
+        </div>
+        <h2><span aria-hidden="true" class="la la-map"></span> {{ model.name }}</h2>
         <ul>
             <stop-summary v-for="stop in model.stops" :key="stop.id" :model="stop"></stop-summary>
         </ul>    
 
         <button v-on:click="addStop" type="button" >{{ $t("add_stop") }}</button>
-        <button v-on:click="editItem" type="button" >{{ $t("edit_me") }}</button>
         <button v-on:click="deleteItem" type="button" >{{ $t("delete_me") }}</button>
     </aside>
 </template>
@@ -39,9 +49,9 @@
         i18n: {
             messages: {
                 en: {
-                    edit_me: 'Edit Route',
+                    edit_me: 'Edit',
                     delete_me: 'Delete Route',
-                    nav_back: 'back',
+                    nav_back: 'Back',
                     add_stop: 'Add a Stop'
                 }
             }
