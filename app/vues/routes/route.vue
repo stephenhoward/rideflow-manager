@@ -14,7 +14,7 @@ ul {
         </div>
         <h2><span aria-hidden="true" class="la la-map"></span> {{ model.name }}</h2>
         <ul>
-            <stop-summary v-for="stop in model.stops" :key="stop.id" :model="stop"></stop-summary>
+            <stop-summary v-bind:listlength="model.stops.length" v-for="stop in model.stops" :key="stop.id" :model="stop"></stop-summary>
         </ul>    
 
         <button v-on:click="addStop" type="button" >{{ $t("add_stop") }}</button>

@@ -32,7 +32,6 @@
             min-width: 200px;
             height: 100%;
             background-clip: padding-box;
-//            border-radius: 6px;
             border-left: 2px solid rgba(0,0,0,0.2);
             background-color: rgba(255,255,255,0.85);
             button.toggle {

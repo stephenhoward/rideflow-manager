@@ -1,6 +1,6 @@
 <style lang="sass" scoped>
     button.toggle {
-        float: right;
+        align-self: flex-end;
         & + * {
             clear: both;
         }
