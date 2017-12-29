@@ -201,23 +201,19 @@ class Model {
 
 }
 
-class ModelList {
+class ModelList extends Array {
     constructor(arr) {
+
+        if ( arr == undefined ) {
+            arr = [];
+        }
+        else if ( ! ( arr instanceof Array ) ) {
+            arr = [ arr ];
+        }
+
+        super(...arr);
+
         Emitter(this);
-
-        this.items  = [];
-
-        if ( arr instanceof Array ) {
-            this.items = arr;
-        }
-        else if ( arr !== undefined ) {
-            this.items = [ arr ];
-        }
-        else {
-            this.items = [];
-        }
-
-        this._index_items();
     }
 
     push(item) {
@@ -229,7 +225,7 @@ class ModelList {
     }
 
     pop() {
-        if ( this.items.length ) {
+        if ( this.length ) {
             return this._mutate( (arr) => { return arr.pop(item) } );
 
         }
@@ -238,7 +234,7 @@ class ModelList {
     }
 
     shift() {
-        if ( this.items.length ) {
+        if ( this.length ) {
             return this._mutate( (arr) => { return arr.shift(item) } );
         }
 
@@ -249,19 +245,15 @@ class ModelList {
         return this._mutate( (arr) => { arr.unshift(item) } );
     }
 
-    get length() {
-        return this.items.length;
-    }
-
     eq(arr) {
 
-        if ( this.items.length != arr.length ) {
+        if ( this.length != arr.length ) {
             return false;
         }
 
-        for( let i=0; i<this.items.length; i++ ) {
+        for( let i=0; i<this.length; i++ ) {
 
-            let a = this.items[i];
+            let a = this[i];
             let b = arr[i];
 
             if ( a instanceof Model ) {
@@ -306,16 +298,15 @@ class ModelList {
     }
 
     _copy_items() {
-        return this.items.slice(0);
-    }
+        let copy = [];
 
-    _index_items() {
-
-        for( let i=0; i<this.items.length; i++) {
-
-            this[i] = this.items[i];
+        for( let i=0; i < this.length; i++ ) {
+            copy.push( this[i] );
         }
+
+        return copy;
     }
+
 }
 
 module.exports = Model;

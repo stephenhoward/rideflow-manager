@@ -43,7 +43,6 @@ ul {
                 })
             },
             addStop() {
-                this.model
             }
         },
         i18n: {

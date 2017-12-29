@@ -76,7 +76,7 @@ module.exports = {
         data: function() {
             return {
                 loading: false,
-                model  : null,
+                model  : {},
                 error  : null
             };
         },
