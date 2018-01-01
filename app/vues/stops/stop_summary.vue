@@ -2,6 +2,17 @@
 li {
     position: relative;
     padding: 7px 10px 7px 24px;
+    &.editing {
+        border-top: 1px solid #aaa;
+        border-bottom: 1px solid #aaa;
+        margin-left: -10px;
+        margin-right: -10px;
+        background-color: rgba(200,200,200,.2);
+        padding-left: 10px;
+        h2 {
+            margin-top: 0;
+        }
+    }
     span.stop-icon {
         display: inline-block;
         border-left: 2px solid #777;
@@ -45,8 +56,11 @@ li {
 </style>
 
 <template>
-    <li v-bind:class=" ( listlength > 1 ? '' : 'single ' ) + 'stop-summary' ">
+    <li v-bind:class=" ( listlength > 1 ? '' : 'single ' ) + ( model.name ? '' : 'editing ' ) + 'stop-summary' ">
+        <div v-if="model.name">
         <span class="stop-icon" aria-hidden="true"><span></span></span> {{ model.name }}
+        </div>
+        <stop-editor v-else></stop-editor>
     </li>
 </template>
 
@@ -55,6 +69,9 @@ li {
         props: ['model','listlength'],
         data: function() {
             return {};
+        },
+        components: {
+            'stop-editor': require('../stops/stop.vue')
         }
     };
 </script>

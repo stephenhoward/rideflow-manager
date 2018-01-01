@@ -30,7 +30,10 @@ class StopMarker {
         }
 
         this.map    = map;
-        this.marker = L.marker(location,{draggable: true}).addTo(this.map);
+        this.marker = L.marker( location, {
+            draggable : true,
+            icon      : L.divIcon({ className: 'stop-marker' })
+        }).addTo(this.map);
 
         let self = this;
 
@@ -43,6 +46,15 @@ class StopMarker {
 
     get id() {
         return this.stop.id || null;
+    }
+
+    get stop() {
+        return this._stop || null;
+    }
+
+    set stop(s) {
+        this._stop = s;
+        return this.stop;
     }
 
     remove() {

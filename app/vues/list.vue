@@ -24,10 +24,10 @@
 
 <template>
     <aside>
-        <h2>{{ $t( "title" ) }}</h2>
+        <h2>{{ $t( "title", { type: type() } ) }}</h2>
         <div class="nav button-group">
             <router-link to="/menu" tag="button" class="back"><span class="la la-angle-left"></span> {{ $t("nav_back") }}</router-link>
-            <button v-on:click="add" v-bind:title="$t('add_title')"type="button"><span class="la la-plus"></span></button>
+            <button v-on:click="add" v-bind:title="$t('add_title', { type: type() })"type="button"><span class="la la-plus"></span></button>
         </div>
 
         <ul>
@@ -37,9 +37,43 @@
 </template>
 
 <script>
-    let ListVueMixin = require('../../lib/vue_mixins.js').ListVueMixin;
-
     export default {
-        mixins: [ ListVueMixin ],
+        data: () => {
+            return {
+                loading : false,
+                error   : null,
+                models  : []
+            };
+        },
+        created: function() {
+            this.fetchData();
+        },
+        watch: {
+            '$route': 'fetchData'
+        },
+        methods: {
+            type: function() { return null },
+
+            add: function() {
+                let currentPath = this.$router.currentRoute.path;
+                this.$router.push(  currentPath + '/new' );
+            },
+            fetchData: function() {
+                let self = this;
+
+                this.$models(this.type()).list().done( (models) => {
+                    self.models = models;
+                });
+            }
+        },
+        i18n: {
+            messages: {
+                en: {
+                    title: '{type}s',
+                    add_title: 'Create a {type}',
+                    nav_back: 'Back'
+                }
+            }
+        }
     };
 </script>

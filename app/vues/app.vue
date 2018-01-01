@@ -86,7 +86,7 @@ body {
             margin: 15px 0 5px 0;
         }
     }
-    aside.editor {
+    aside.model.editor {
         h2 {
             position: relative;
             font-size: 14pt;
@@ -115,6 +115,14 @@ div.button-group {
         font-size: 10pt;
     }
 }
+div.leaflet-marker-icon.stop-marker {
+    width: 14px;
+    height: 14px;
+    border-radius:9px;
+    background: white;
+    border: 2px solid #555;
+}
+
 </style>
 
 <template>

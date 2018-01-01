@@ -1,39 +1,27 @@
 <template>
-    <aside class="vehicle">
-        <a href="#" v-on:click="goBack">&lt; {{ $t("nav_back") }}</a>
-        <h3>{{ model.name }}</h3>
-        <button v-on:click="editItem" type="button" >{{ $t("edit_me") }}</button>
-        <button v-on:click="deleteItem" type="button" >{{ $t("delete_me") }}</button>
-    </aside>
+    <div>
+        <h2>
+            <span aria-hidden="true" class="la la-bus"></span>
+            <input v-if="mode=='edit'" type="text" v-model="model.name" v-bind:placeholder=" model.id ? $t('vehicle_name') : $t('new_vehicle_name') ">
+            <span v-else> {{ model.name }}</span>
+        </h2>
+    </div>
 </template>
 
 <script>
-    let ModelVueMixin = require('../../lib/vue_mixins.js').ModelVueMixin;
 
     export default {
-        mixins: [ ModelVueMixin ],
-        methods: {
-            type: () => { return 'Vehicle' },
-            editItem() {
-                this.$router.push('/vehicles/' + this.model.id + '/edit' );
-            },
-            goBack() {
-                this.$router.go(-1);
-            },
-            deleteItem() {
-                let self = this;
+        props: [ 'model','mode'],
+        data: () => {
+            return {
 
-                this.model.delete().done( () => {
-                    self.$router.go(-1);
-                })
-            }
+            };
         },
         i18n: {
             messages: {
                 en: {
-                    edit_me: 'Edit Vehicle',
-                    delete_me: 'Delete Vehicle',
-                    nav_back: 'back'
+                    vehicle_name: 'Vehicle Name',
+                    new_vehicle_name: 'New Vehicle Name',
                 }
             }
         }

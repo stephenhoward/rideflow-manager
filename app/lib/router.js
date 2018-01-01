@@ -6,6 +6,32 @@ let MenuLink = {
   }
 };
 
+let composeVue = require('./composeVue.js');
+let ModelVue   = require('../vues/model.vue');
+let ListVue    = require('../vues/list.vue');
+
+let modelVue = (type) => {
+
+    return _composeModelVue(type,ModelVue);
+}
+
+let modelListVue = (type) => {
+
+    return _composeModelVue(type,ListVue);
+}
+
+let _composeModelVue = ( type, vue ) => {
+
+    let component = Object.assign({},vue);
+    let methods   = Object.assign({},component.methods);
+
+    methods.type = () => { return type };
+    component.methods = methods;
+
+    return component;
+
+}
+
 module.exports = {
 
      routes : [
@@ -14,22 +40,16 @@ module.exports = {
           children: [
               { path: '',                component: MenuLink },
               { path: 'menu',            component: require('../vues/main_menu.vue')  },
-              { path: 'routes',          component: require('../vues/routes/routes.vue') },
-              { path: 'routes/new',      component: require('../vues/routes/route_edit.vue') },
-              { path: 'routes/:id',      component: require('../vues/routes/route.vue'), props: true },
-              { path: 'routes/:id/edit', component: require('../vues/routes/route_edit.vue'), props: true },
+              { path: 'routes',          component: composeVue( modelListVue('Route'), 'model-summary', '../vues/routes/route_summary.vue') },
+              { path: 'routes/new',      component: composeVue( modelVue('Route'), 'model-view', '../vues/routes/route.vue'), props: true },
+              { path: 'routes/:id',      component: composeVue( modelVue('Route'), 'model-view', '../vues/routes/route.vue'), props: true },
 
-              { path: 'stops/new',      component: require('../vues/stops/stop_edit.vue'), name: 'new_stop', props: true },
-              { path: 'stops/:id',      component: require('../vues/stops/stop.vue'), name: 'stop_details', props: true },
-              { path: 'stops/:id/edit', component: require('../vues/stops/stop.vue'), props: true },
+              { path: 'stops/new',      component: composeVue( modelVue('Stop'), 'model-vue', '../vues/stops/stop.vue'), name: 'new_stop', props: true },
+              { path: 'stops/:id',      component: composeVue( modelVue('Stop'), 'model-vue', '../vues/stops/stop.vue' ), name: 'stop_details', props: true },
 
-              { path: 'vehicles',          component: require('../vues/vehicles/vehicles.vue') },
-              { path: 'vehicles/new',      component: require('../vues/vehicles/vehicle_edit.vue') },
-              { path: 'vehicles/:id',      component: require('../vues/vehicles/vehicle.vue'), props: true },
-              { path: 'vehicles/:id/edit', component: require('../vues/vehicles/vehicle_edit.vue'), props: true }
-              // { path: 'routes/new', component: rfEditRoute },
-              // { path: 'drivers',  component: Drivers },
-              // { path: 'rides',    component: Rides }
+              { path: 'vehicles',          component: composeVue( modelListVue('Vehicle'), 'model-summary', '../vues/vehicles/vehicle_summary.vue') },
+              { path: 'vehicles/new',      component: composeVue( modelVue('Vehicle'), 'model-view', '../vues/vehicles/vehicle.vue'), props: true },
+              { path: 'vehicles/:id',      component: composeVue( modelVue('Vehicle'), 'model-view', '../vues/vehicles/vehicle.vue'), props: true },
           ]
       },
       { path: '/login',           component: require('../vues/auth/login.vue'),           name: 'login',           props: true },

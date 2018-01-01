@@ -6,35 +6,37 @@ ul {
 }
 </style>
 
+
 <template>
-    <aside class="route">
-        <div class="nav button-group">
-            <button v-on:click="goBack" class="back"><span class="la la-angle-left"></span> {{ $t("nav_back") }}</button>
-            <button v-on:click="editItem" type="button" >{{ $t("edit_me") }}</button>
-        </div>
-        <h2><span aria-hidden="true" class="la la-map"></span> {{ model.name }}</h2>
+    <div>
+        <h2><span aria-hidden="true" class="icon la la-map"></span> 
+            <input v-if="mode == 'edit'" type="text" v-model="model.name" v-bind:placeholder=" model.id ? $t('route_name') : $t('new_route_name') ">
+            <span v-else >{{ model.name }}</span>
+        </h2>
         <ul>
             <stop-summary v-bind:listlength="model.stops.length" v-for="stop in model.stops" :key="stop.id" :model="stop"></stop-summary>
-        </ul>    
+            <li v-if="addingStop" class="adding_stop">
+                {{ $t('how_to_add_stop') }}
+                <button v-on:click="cancelAddStop" type="button">{{ $t("cancel_stop") }}</button>
+            </li>
+        </ul>
 
-        <button v-on:click="addStop" type="button" >{{ $t("add_stop") }}</button>
-        <button v-on:click="deleteItem" type="button" >{{ $t("delete_me") }}</button>
-    </aside>
+        <button v-if="mode == 'edit'" :class="( addingStop ? 'template' : '')" v-on:click="addStop" type="button" >{{ $t("add_stop") }}</button>
+    </div>
 </template>
 
+
 <script>
-    let ModelVueMixin = require('../../lib/vue_mixins.js').ModelVueMixin;
 
     export default {
-        mixins: [ ModelVueMixin ],
+        props: [ 'model','mode' ],
+        data: () => {
+            return {
+                addingStop: false
+            };
+        },
         methods: {
             type: () => { return 'Route' },
-            editItem() {
-                this.$router.push('/route/' + this.model.id + '/edit' );
-            },
-            goBack() {
-                this.$router.go(-1);
-            },
             deleteItem() {
                 let self = this;
 
@@ -43,20 +45,31 @@ ul {
                 })
             },
             addStop() {
+                this.addingStop = true;
+                this.$map.addStopToRoute(this.model).done((marker) => {
+                    console.log('got stop');
+                });
+            },
+            cancelAddStop() {
+
             }
+        },
+        components: {
+            'stop-summary': require ('../stops/stop_summary.vue')
         },
         i18n: {
             messages: {
                 en: {
-                    edit_me: 'Edit',
                     delete_me: 'Delete Route',
-                    nav_back: 'Back',
-                    add_stop: 'Add a Stop'
+                    add_stop: 'Add a Stop',
+                    cancel_stop: 'Cancel',
+                    route_name: 'Name of Route',
+                    new_route_name: 'Name of New Route',
+                    how_to_add_stop: 'Click the map where you want the stop to be (you can adjust this later)'
                 }
             }
         },
-        components: {
-            'stop-summary': require ('./stop_summary.vue')
-        }
-    };
+    }
+
+
 </script>

@@ -54,16 +54,20 @@
 
             this.$nextTick( () => {
 
-                self.map = L.map('transitmap').setView( config.map.coordinates, config.map.zoom );
+                self.$map = L.map('transitmap').setView( config.map.coordinates, config.map.zoom );
 
-                L.tileLayer(config.map.tiles, {
-                    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="http://mapbox.com">Mapbox</a>',
+                self.$map.addLayer( L.tileLayer(config.map.tiles, {
+                    attribution: config.map.attribution,
                     maxZoom: 18,
                     id: config.map.view,
                     accessToken: config.map.token
-                }).addTo(self.map);
+                }) );
 
-                self.map.on('click', (e) => { self.newStop(e.latlng); });
+                self.$map.on('click', (e) => {
+                    if ( ! self.$map.mode ) {
+                        self.$router.push('/');
+                    }
+                });
             });
         },
         methods: {
@@ -76,7 +80,7 @@
                 }
                 else {
 
-                    let marker = new StopMarker( this.map, latlng );
+                    let marker = new StopMarker( this.$map, latlng );
 
                     this.current_marker = marker;
 
