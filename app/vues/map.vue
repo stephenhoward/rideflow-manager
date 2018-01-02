@@ -7,13 +7,7 @@
 </style>
 
 <template>
-    <main id="transitmap">
-        <div class="edit_stop template">
-            <input >
-            <button>Ok</button>
-            <button>Cancel</button>
-        </div>
-    </main>
+    <main id="transitmap"></main>
 </template>
 
 <script>
@@ -31,6 +25,12 @@
             };
         },
         watch: {
+            'stops': {
+                handler: function(stops) {
+                    this.updateStopMarkers();
+                },
+                deep: true
+            }
         },
         created: function() {
             let self = this;
@@ -42,11 +42,14 @@
                 }
             });
             self.$models('Stop').list().done((stops) => {
-                self.stops = {};
                 for( let i = 0; i < stops.length; i++ ) {
-                    self.stops[ stops[i].id ] = stops[i];
+                    let stop = stops[i];
+
+                    this.stops.push(stop);
                 }
+                this.updateStopMarkers();
             });
+
         },
         mounted: function() {
 
@@ -68,40 +71,31 @@
                         self.$router.push('/');
                     }
                 });
+                $(self.$map).on('add-stop', (e,stop) => {
+                    self.stops.push(stop);
+                });
             });
         },
         methods: {
             
-            newStop(latlng) {
+            updateStopMarkers() {
+                let existing_markers = Object.assign({},this.markers);
 
-                if ( this.current_marker && ! this.current_marker.id ) {
+                for( let i = 0; i < this.stops.length; i++ ) {
 
-                    this.current_marker.moveTo(latlng);
-                }
-                else {
+                    let stop = this.stops[i];
 
-                    let marker = new StopMarker( this.$map, latlng );
-
-                    this.current_marker = marker;
-
-                    marker
-                        .on('click',(e) => {
-                            if ( marker.id ) {
-
-                                this.$router.push({ name: 'stop_details', params: { id:  marker.id } });
-                            }
-                        })
-                        .on('remove', (e) => {
-                            this.current_marker = null;
-                        });
-                }
-
-                this.$router.push({
-                    name: 'new_stop',
-                    params: {
-                        marker: this.current_marker
+                    if ( ! ( stop.id in this.markers ) ) {
+                        this.markers[ stop.id ] = new StopMarker(this.$map,stop);
                     }
-                });
+
+                    delete existing_markers[ stop.id ];
+                }
+
+                for( let i = 0; i < existing_markers.length; i++ ) {
+
+                    existing_markers[i].remove();
+                }
             }
         }
     };

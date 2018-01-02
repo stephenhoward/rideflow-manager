@@ -14,10 +14,6 @@ ul {
             <button v-else v-on:click="editItem" type="button" >{{ $t("edit_me") }}</button>
         </div>
         <model-view :model="model" :mode="mode"></model-view>
-        <div v-if="mode == 'edit'" class="button-group">
-            <button v-on:click="saveData" type="button" >{{ model.id ? $t("stop_save") : $t("stop_create") }}</button>
-            <button v-on:click="cancelEdit" type="button">{{ $t("cancel") }}</button>
-        </div>
         <button v-if="mode == 'edit'" v-on:click="deleteItem" type="button" >{{ $t("delete_me", { type: type() } ) }}</button>
     </aside>
 </template>
@@ -41,14 +37,8 @@ ul {
             fetchData: function(id) {
                 let self = this;
 
-console.log(this.type());
                 if ( id ) {
                     this.$models(this.type()).get(this.id).done( (model) => {
-                        if ( this.type() == 'Route' ) {
-                            model.stops.push( this.$new_model('Stop',{ name: '3rd and Main', location: [44,-128] }) );
-                            model.stops.push( this.$new_model('Stop',{ name: 'Elm and Broad', location: [44,-126] }) );
-                            model.stops.push( this.$new_model('Stop',{ name: 'City Hall', location: [44,-126] }) );
-                        }
                         self.model = model;
                     });
                 }
@@ -76,6 +66,7 @@ console.log(this.type());
                 this.saveData();
             },
             goBack() {
+                this.cancelEdit();
                 this.$router.go(-1);
             },
             deleteItem() {

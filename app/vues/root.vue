@@ -29,7 +29,7 @@
             right: 0px;
             z-index: 5;
             padding: 10px;
-            min-width: 200px;
+            width: 250px;
             height: 100%;
             background-clip: padding-box;
             border-left: 2px solid rgba(0,0,0,0.2);

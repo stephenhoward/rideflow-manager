@@ -2,26 +2,58 @@
 ul {
     list-style-type: none;
     margin: 10px 0;
-    padding: 0;    
+    padding: 0; 
+}
+p.adding_stop {
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #eee;
+    font-weight: 300;
+    line-height: 1.3;
+    width: 100%;
+    overflow: hidden;
+    button {
+        color: #f70;
+        font-size: 10pt;
+        border: none;
+        background: none;
+        display: block;
+        float: right;
+        margin-top: 10px;
+    }
+}
+
+button.add_stop {
+    color: #f70;
+    font-size: 10pt;
+    border: none;
+    background: none;
+    display: block;
+    padding: 8px;
+    margin: 20px 0;
+    width: 100%;
+
 }
 </style>
 
 
 <template>
-    <div>
+    <div class="route">
         <h2><span aria-hidden="true" class="icon la la-map"></span> 
             <input v-if="mode == 'edit'" type="text" v-model="model.name" v-bind:placeholder=" model.id ? $t('route_name') : $t('new_route_name') ">
             <span v-else >{{ model.name }}</span>
         </h2>
         <ul>
-            <stop-summary v-bind:listlength="model.stops.length" v-for="stop in model.stops" :key="stop.id" :model="stop"></stop-summary>
-            <li v-if="addingStop" class="adding_stop">
-                {{ $t('how_to_add_stop') }}
-                <button v-on:click="cancelAddStop" type="button">{{ $t("cancel_stop") }}</button>
-            </li>
+            <stop-summary v-bind:listlength="model.stops ? model.stops.length : 0" v-for="stop in model.stops" :key="stop.id" :model="stop"></stop-summary>
         </ul>
 
-        <button v-if="mode == 'edit'" :class="( addingStop ? 'template' : '')" v-on:click="addStop" type="button" >{{ $t("add_stop") }}</button>
+        <p v-if="addingStop" class="adding_stop">
+            {{ $t('how_to_add_stop') }}
+            <button v-on:click="cancelAddStop" type="button">{{ $t("cancel_stop") }}</button>
+        </p>
+
+        <button :class="'add_stop' + ( addingStop ? ' hidden' : '')" v-if="mode == 'edit' || ! model.stops || model.stops.length == 0" v-on:click="addStop" type="button" >{{ $t("add_stop") }}</button>
     </div>
 </template>
 
@@ -46,11 +78,14 @@ ul {
             },
             addStop() {
                 this.addingStop = true;
-                this.$map.addStopToRoute(this.model).done((marker) => {
-                    console.log('got stop');
+                this.$map.addStop(this.model).done((stop) => {
+                    this.model.stops.push( stop );
+                    this.addingStop = false;
                 });
             },
             cancelAddStop() {
+                this.addingStop = false;
+                this.$map.cancelAddStop();
 
             }
         },

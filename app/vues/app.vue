@@ -11,8 +11,8 @@
     clip-path: inset(50%);
     border: 0;
 }
-.template {
-    display: none;
+.hidden {
+    display: none !important;
 }
 html {
     margin: 0;
@@ -20,6 +20,14 @@ html {
 }
 * {
     box-sizing: border-box;
+}
+button {
+    font-size: 10pt;
+    padding: 4px 10px;
+    background: white;
+    -webkit-appearance: none;
+    border: 1px solid #aaa;
+    border-radius: 6px;
 }
 body {
     font-family: "Helvetica Neue", Arial, sans-serif;
