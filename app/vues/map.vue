@@ -27,7 +27,7 @@
         watch: {
             'stops': {
                 handler: function(stops) {
-                    this.updateStopMarkers();
+                    this.updateStopMarkers(stops);
                 },
                 deep: true
             }
@@ -46,6 +46,10 @@
                     let stop = stops[i];
 
                     this.stops.push(stop);
+
+                    stop.on('model-deleted', () => {
+                        this.stops = this.stops.filter( (item) => { return stop.id != item.id } );
+                    });
                 }
                 this.updateStopMarkers();
             });
@@ -73,28 +77,36 @@
                 });
                 $(self.$map).on('add-stop', (e,stop) => {
                     self.stops.push(stop);
+                    stop.on('model-deleted', () => {
+                        self.stops = self.stops.filter( (item) => { return stop.id != item.id } );
+                    });
                 });
             });
         },
         methods: {
             
-            updateStopMarkers() {
+            updateStopMarkers(stops) {
+                if ( ! stops ) {
+                    stops = this.stops;
+                }
                 let existing_markers = Object.assign({},this.markers);
 
-                for( let i = 0; i < this.stops.length; i++ ) {
+                for( let i = 0; i < stops.length; i++ ) {
 
-                    let stop = this.stops[i];
+                    let stop = stops[i];
+                    let id   = stop.id || '';
 
-                    if ( ! ( stop.id in this.markers ) ) {
-                        this.markers[ stop.id ] = new StopMarker(this.$map,stop);
+                    if ( ! ( id in this.markers ) ) {
+                        this.markers[ id ] = new StopMarker(this.$map,stop);
                     }
 
-                    delete existing_markers[ stop.id ];
+                    delete existing_markers[ id ];
                 }
 
-                for( let i = 0; i < existing_markers.length; i++ ) {
+                for( let id in existing_markers ) {
 
-                    existing_markers[i].remove();
+                    existing_markers[id].remove();
+                    delete this.markers[id];
                 }
             }
         }

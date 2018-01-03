@@ -96,15 +96,19 @@ li {
         methods: {
             saveStop() {
                 let self = this;
-                this.model.save().done(() => {
-                    console.log(self.model);
-                });
-
+                if ( this.model.name ) {
+                    this.model.save().done(() => {
+                        this.mode = '';
+                    });
+                }
+                else {
+                    console.log( 'Cannot save stop without a name' );
+                }
             },
             cancelStop() {
                 this.model.revert();
                 if ( ! this.model.id ) {
-
+                    this.model.delete();
                 }
 
             }

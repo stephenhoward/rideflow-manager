@@ -137,6 +137,7 @@ class Model {
         let url = self.constructor.url() + '/' + self.id;
 
         if ( ! self.id ) {
+            self.emit('model-deleted');
             defer.reject();
         }
         else {
@@ -201,8 +202,9 @@ class Model {
 
 }
 
-class ModelList extends Array {
+class ModelList {
     constructor(arr) {
+        this.array = arr;
 
         if ( arr == undefined ) {
             arr = [];
@@ -211,7 +213,16 @@ class ModelList extends Array {
             arr = [ arr ];
         }
 
-        super(...arr);
+        let self = this;
+        for( let i = 0; i < this.array.length; i++ ) {
+            let model = self.array[i];
+
+            self[i] = model;
+
+            if ( model instanceof Model ) {
+                model.on('model-deleted',() => { self.remove(model); } );
+            }
+        }
 
         Emitter(this);
     }
@@ -222,6 +233,19 @@ class ModelList extends Array {
 
     concat(items) {
         return this._mutate( (arr) => { arr.concat(items) } );
+    }
+
+    remove(item) {
+        return this._replaceList( this.array.filter( (i) => {
+
+            if ( item instanceof Model ) {
+
+                return i.id != item.id;
+            }
+            else {
+                return i !== item;
+            }
+        } ) );
     }
 
     pop() {
@@ -290,11 +314,17 @@ class ModelList extends Array {
         let arr = this._copy_items();
 
         let result = mutate(arr);
+        let update = this._replaceList(arr);
+
+        return result ? result : update;
+    }
+
+    _replaceList(arr) {
         let update = new ModelList(arr);
 
         this.emit('list-replace', update );
 
-        return result ? result : update;
+        return update;
     }
 
     _copy_items() {
@@ -305,6 +335,10 @@ class ModelList extends Array {
         }
 
         return copy;
+    }
+
+    get length() {
+        return this.array.length;
     }
 
 }

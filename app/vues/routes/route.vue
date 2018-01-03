@@ -45,7 +45,7 @@ button.add_stop {
             <span v-else >{{ model.name }}</span>
         </h2>
         <ul>
-            <stop-summary v-bind:listlength="model.stops ? model.stops.length : 0" v-for="stop in model.stops" :key="stop.id" :model="stop"></stop-summary>
+            <stop-summary v-bind:listlength="model.stops ? model.stops.length : 0" v-for="stop in model.stops.array" :key="stop.id" :model="stop"></stop-summary>
         </ul>
 
         <p v-if="addingStop" class="adding_stop">
@@ -77,10 +77,11 @@ button.add_stop {
                 })
             },
             addStop() {
-                this.addingStop = true;
-                this.$map.addStop(this.model).done((stop) => {
-                    this.model.stops.push( stop );
-                    this.addingStop = false;
+                let self = this;
+                self.addingStop = true;
+                self.$map.addStop(this.model).done((stop) => {
+                    self.model.stops.push( stop );
+                    self.addingStop = false;
                 });
             },
             cancelAddStop() {
