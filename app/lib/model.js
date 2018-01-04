@@ -13,15 +13,7 @@ class Model {
 
                 let v = properties[k];
 
-                // special book-keeping for list properties
-                if ( this.definition()[k] instanceof Array ) {
-
-                    v = new ModelList( v );
-                    v.on('list-replace', (new_list) => {
-                        self._set_list(k,new_list);
-                    });
-                }
-                this.properties[k] = v;
+                self._set(k,v,true);
             }
         }
     }
@@ -30,17 +22,20 @@ class Model {
         return {};
     }
 
-    _set(k,v) {
-        if ( k in this.definition() ) {
+    _set(k,v,nodirty) {
+        let definition = this.definition();
+
+        if ( k in definition ) {
 
             // special book-keeping for list properties
-            if ( this.properties[k] instanceof ModelList ) {
-                this._set_list(k,v);
+            if ( Array.isArray(definition[k]) ) {
+                this._set_list(k,v,nodirty);
             }
+            else if ( this.properties[k] !== v ) {
 
-            if ( this.properties[k] !== v ) {
-
-                this._mark_dirty( k, v, (a,b) => { return a === b } );
+                if( ! nodirty ) {
+                    this._mark_dirty( k, v, (a,b) => { return a === b } );
+                }
                 this.properties[k] = v;
 
                 this.emit('model-changed');
@@ -51,22 +46,28 @@ class Model {
         return null;
     }
 
-    _set_list(k,v) {
+    _set_list(k,v,nodirty) {
         let self = this;
 
-        if ( ! this.properties[k].eq(v) ) {
+        if ( ! this.properties[k] || ! this.properties[k].eq(v) ) {
 
-            this._mark_dirty( k, v, (a,b) => { return a.eq(b) } );
+            if ( ! nodirty ) {
+                this._mark_dirty( k, v, (a,b) => { return a.eq(b) } );
+            }
 
             if ( ! ( v instanceof ModelList ) ) {
                 v = new ModelList(v);
             }
 
-            v.on('list-replace', (new_list) => {
+            v.once('list-replace', (new_list) => {
                 self._set_list(k,new_list);
             });
 
             this.properties[k] = v;
+
+            if ( this.id ) {
+                this.save(k);
+            }
 
             this.emit('model-changed');
         }
@@ -105,7 +106,7 @@ class Model {
         }
     }
 
-    save() {
+    save(property) {
         let self  = this;
         let defer = $.Deferred();
         let url   = self.constructor.url();
@@ -114,17 +115,43 @@ class Model {
             url = url + '/' + self.id;
         }
 
+        // only send what we need to:
+        let data = {};
+        if ( self.id ) {
+            let all_data = self.dump();
+            for ( let k in self.dirty ) {
+                data[k] = all_data[k];
+            }
+        }
+        else {
+            data = self.dump();
+        }
+
+        // looking to only save 1 property:
+        if ( property && property in data ) {
+            let d = {};
+
+            d[property] = data[property];
+            data     = d;
+        }
+
+        if( ! Object.keys(data).length ) {
+            defer.reject();
+            return;
+        }
+
         $.ajax({
             url         : url,
             type        : 'POST',
             dataType    : 'json',
             contentType : 'application/json; charset=utf-8',
-            data        : JSON.stringify(this.dump())
+            data        : JSON.stringify(data)
         }).done( (json) => {
             for( let k of Object.keys(json) ) {
-                self._set(k,json[k]);
+                self._set(k,json[k],true);
             }
             self.dirty = {};
+            self.emit('model-saved');
             defer.resolve(self);
         });
 
@@ -200,6 +227,26 @@ class Model {
         return true;
     }
 
+    static subclass(url,def) {
+        let Subclass = class extends Model {
+            definition() {
+                return def;
+            }
+            static url() {
+                return url;
+            }
+        }
+
+        for( let k in def ) {
+            Object.defineProperty(Subclass.prototype, k, {
+                get: function get ()  { return this._get(k)   },
+                set: function set (v) { return this._set(k,v) },
+                enumerable: true
+            });
+        }
+
+        return Subclass;
+    }
 }
 
 class ModelList {
@@ -259,13 +306,13 @@ class ModelList {
 
     shift() {
         if ( this.length ) {
-            return this._mutate( (arr) => { return arr.shift(item) } );
+            return this._mutate( (arr) => { return arr.shift() } );
         }
 
         return null;
     }
 
-    unshift() {
+    unshift(item) {
         return this._mutate( (arr) => { arr.unshift(item) } );
     }
 

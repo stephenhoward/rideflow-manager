@@ -28,7 +28,21 @@ ModelSets.install = (Vue, options) => {
             params = {};
         }
 
-        return new Models[type](params);
+        let set = Vue.prototype.$models(type);
+        let model = new Models[type](params);
+
+        if ( model.id ) {
+            set.add(model);
+        }
+        else {
+            model.on('model-save', () => {
+                if ( model.id ) {
+                    set.add(model);
+                }
+            });
+        }
+
+        return model;
     }
 };
 
@@ -49,22 +63,16 @@ class ModelSet {
         let self  = this;
         let defer = $.Deferred();
 
-        //if ( this.type.definition().id ) {
-
-            if ( this.models[id] ) {
-                defer.resolve( this.models[id] );
-            }
-
+        if ( this.models[id] ) {
+            defer.resolve( this.models[id] );
+        }
+        else {
             $.getJSON( this.type.url() + '/' + id )
                 .done( (json) => {
                     self.models[id] = self._new(json);
                     defer.resolve( this.models[id] );
                 });
-        //}
-        //else {
-        //    console.log( '"' + this.type.name + '" has no id to load by.')
-        //    defer.reject();
-        //}
+        }
 
         return defer.promise();
     }

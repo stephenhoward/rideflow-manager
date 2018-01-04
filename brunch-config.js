@@ -28,5 +28,8 @@ module.exports = {
         styles: {
             leaflet: ["dist/leaflet.css"]
         }
+    },
+    conventions: {
+        ignored: /^test\/*/
     }
 };

@@ -46,6 +46,7 @@ button.add_stop {
         </h2>
         <ul>
             <stop-summary v-bind:listlength="model.stops ? model.stops.length : 0" v-for="stop in model.stops.array" :key="stop.id" :model="stop"></stop-summary>
+            <stop-summary v-if="new_stop" v-bind:listlength="1" :model="new_stop"></stop-summary>
         </ul>
 
         <p v-if="addingStop" class="adding_stop">
@@ -64,6 +65,7 @@ button.add_stop {
         props: [ 'model','mode' ],
         data: () => {
             return {
+                new_stop: null,
                 addingStop: false
             };
         },
@@ -80,12 +82,20 @@ button.add_stop {
                 let self = this;
                 self.addingStop = true;
                 self.$map.addStop(this.model).done((stop) => {
-                    self.model.stops.push( stop );
+                    self.new_stop = stop;
+                    stop.once('model-saved', () => {
+                        if ( stop.id ) {
+                            self.model.stops.push( stop );
+                            self.new_stop = '';
+                            self.model = self.model;
+                        }
+                    });
                     self.addingStop = false;
                 });
             },
             cancelAddStop() {
                 this.addingStop = false;
+                self.new_stop = '';
                 this.$map.cancelAddStop();
 
             }

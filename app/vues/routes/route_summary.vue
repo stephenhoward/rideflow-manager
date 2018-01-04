@@ -13,7 +13,7 @@
 <template>
     <router-link class="route-summary" :to="'/routes/' + model.id" tag="li">
         <h3>{{ model.name }}</h3>
-        <span class="meta">{{ model.stops.length }} {{ $tc('stops', model.stops.length) }}</span>
+        <span class="meta">{{ model.stops ? model.stops.length : 0 }} {{ $tc('stops', model.stops ? model.stops.length : 0 ) }}</span>
     </router-link>
 </template>
 
