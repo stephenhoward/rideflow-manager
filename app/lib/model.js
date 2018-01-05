@@ -297,7 +297,7 @@ class ModelList {
 
     pop() {
         if ( this.length ) {
-            return this._mutate( (arr) => { return arr.pop(item) } );
+            return this._mutate( (arr) => { return arr.pop() } );
 
         }
 
