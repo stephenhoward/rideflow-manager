@@ -97,7 +97,7 @@ li {
             saveStop() {
                 let self = this;
                 if ( this.model.name ) {
-                    this.model.save().done(() => {
+                    this.model.save().then(() => {
                         this.mode = '';
                     });
                 }

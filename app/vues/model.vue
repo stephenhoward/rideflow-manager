@@ -33,6 +33,12 @@ ul {
         created: function() {
             this.fetchData(this.id);
         },
+        beforeDestroy: function() {
+            if ( this.mode == 'edit' ) {
+                return false;
+            }
+
+        },
         methods: {
             fetchData: function(id) {
                 let self = this;
@@ -49,7 +55,7 @@ ul {
             saveData: function() {
                 let self = this;
 
-                this.model.save().done( () => {
+                this.model.save().then( () => {
                     self.$models( this.type() ).add(this.model);
                     self.$router.go(-1);
                 });
@@ -72,7 +78,7 @@ ul {
             deleteItem() {
                 let self = this;
 
-                this.model.delete().done( () => {
+                this.model.delete().then( () => {
                     self.$router.go(-1);
                 })
             }

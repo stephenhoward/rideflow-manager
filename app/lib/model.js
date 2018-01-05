@@ -1,4 +1,5 @@
 const Emitter = require('component-emitter');
+const axios   = require('axios');
 
 class Model {
     constructor(properties) {
@@ -66,7 +67,9 @@ class Model {
             this.properties[k] = v;
 
             if ( this.id ) {
-                this.save(k);
+                this.save(k).catch( error => {
+                    // TODO
+                });
             }
 
             this.emit('model-changed');
@@ -108,7 +111,6 @@ class Model {
 
     save(property) {
         let self  = this;
-        let defer = $.Deferred();
         let url   = self.constructor.url();
 
         if ( self.id ) {
@@ -135,54 +137,61 @@ class Model {
             data     = d;
         }
 
-        if( ! Object.keys(data).length ) {
-            defer.reject();
-            return;
-        }
+        let promise = new Promise( (resolve,reject) => {
 
-        $.ajax({
-            url         : url,
-            type        : 'POST',
-            dataType    : 'json',
-            contentType : 'application/json; charset=utf-8',
-            data        : JSON.stringify(data)
-        }).done( (json) => {
-            for( let k of Object.keys(json) ) {
-                self._set(k,json[k],true);
+            // nothing new to save:
+            if( ! Object.keys(data).length ) {
+                resolve(self);
+                return;
             }
-            self.dirty = {};
-            self.emit('model-saved');
-            defer.resolve(self);
+
+            axios.post( url, JSON.stringify(data), {
+                responseType    : 'json',
+                contentType : 'application/json; charset=utf-8',
+            }).then( (response) => {
+                let json = response.data;
+                for( let k of Object.keys(json) ) {
+                    self._set(k,json[k],true);
+                }
+                self.dirty = {};
+                self.emit('model-saved');
+                resolve(self);
+            })
+            .catch( (error) => {
+                reject(error);
+            });
         });
 
-        return defer.promise();
+        return promise;
     }
 
     delete() {
-        let self = this;
-        let defer = $.Deferred();
-        let url = self.constructor.url() + '/' + self.id;
+        let self  = this;
+        let url   = self.constructor.url() + '/' + self.id;
 
-        if ( ! self.id ) {
-            self.emit('model-deleted');
-            defer.reject();
-        }
-        else {
+        let promise = new Promise( ( resolve, reject ) => {
 
-            $.ajax({
-                url         : url,
-                type        : 'DELETE',
-                dataType    : 'json',
-            }).done( (json) => {
+            // cannot delete something with no id
+            if ( ! self.id ) {
                 self.emit('model-deleted');
-                defer.resolve(self);
-            }).fail( (json) => {
-                defer.reject(json);
-            });
+                resolve(self);
+            }
+            else {
 
-        }
+                axios.delete( url, {
+                    responseType    : 'json',
+                }).then( (response) => {
+                    self.emit('model-deleted');
+                    resolve(self);
+                }).catch( (error) => {
+                    console.log(error);
+                    reject(error);
+                });
 
-        return defer.promise();
+            }
+        });
+
+        return promise;
     }
 
     dump() {
@@ -208,11 +217,11 @@ class Model {
             return this.id == model.id;
         }
 
-        if ( Object.keys(this.properties).length != Object.keys(model).length ) {
+        if ( Object.keys(this.dump()).length != Object.keys(model.dump()).length ) {
             return false;
         }
 
-        for( k in this.properties ) {
+        for( let k in this.properties ) {
             let a = this.properties[k];
             let b = model[k];
 

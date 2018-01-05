@@ -32,6 +32,22 @@
     service:
       name: nginx
       state: restarted
+  - file:
+      path: /home/dev/node_modules
+      state: directory
+      mode: 0755
+      owner: dev
+      group: dev
+  - name: link node_modules directory into webhost directory
+    file:
+      src: /home/dev/node_modules
+      dest: /host-web/node_modules
+      state: link
+      owner: rideflow
+      group: rideflow
+
+  - name: set up node bin
+    shell: 'echo "\nexport PATH=$HOME/node_modules/.bin:$PATH\n" >> /home/dev/.profile'
   - name: build javascript app
     shell: brunch build
     args:

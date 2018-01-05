@@ -1,4 +1,4 @@
-require('./util.js');
+const axios   = require('axios');
 
 let refresh_timer = null;
 
@@ -60,6 +60,14 @@ $.ajaxSetup({
             window.app.$router.push({ name: 'login', params: { error: xhr.status } });
         }
     }
+});
+
+axios.interceptors.request.use( (config) => {
+    let jwt = sessionStorage.getItem('jwt');
+    if ( jwt ) {
+        config.headers['Authorization'] = 'Bearer ' + jwt;
+    }
+    return config;
 });
 
 if ( sessionStorage.getItem('jwt') ) {

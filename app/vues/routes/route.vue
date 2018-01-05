@@ -74,7 +74,7 @@ button.add_stop {
             deleteItem() {
                 let self = this;
 
-                this.model.delete().done( () => {
+                this.model.delete().then( () => {
                     self.$router.go(-1);
                 })
             },

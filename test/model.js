@@ -7,12 +7,13 @@ const util = require('util')
 let TestModel = Model.subclass(
     '/v1/test',
     {
+        id : '',
         arr: [],
         str: ''
     }
 );
 
-let params = { arr: [1,2], str: 'foo'};
+let params = { id: 1, arr: [1,2], str: 'foo'};
 let model  = new TestModel(params);
 
 test('Model class check', t => {
@@ -49,4 +50,52 @@ test('Modify list attribute', t => {
 
     model2.arr = [4,5,6];
     t.deepEqual(model2.arr.dump(),[4,5,6]);
+});
+
+let model3 = new TestModel(params);
+
+test('Model Reversion', t => {
+    model3.str='fiz';
+    model3.arr=[];
+    t.notDeepEqual(model3.dump(),params);
+    model3.revert();
+    t.deepEqual(model3.dump(),params);
+});
+
+let model4 = new TestModel(params);
+let model5 = new TestModel(params);
+
+test('Model equal by id', t => {
+    t.true( model4.eq(model4) );
+    t.true( model4.eq(model5) );
+    t.true( model5.eq(model4) );
+    model5.id=2;
+    t.false( model4.eq(model5) );
+    t.false( model5.eq(model4) );
+
+});
+
+let noIdModel = Model.subclass(
+    '/v1/test',
+    {
+        arr: [],
+        str: ''
+    }
+);
+
+let params2 = { arr: [0,1,2], str: 'test' };
+
+let model_a = new noIdModel(params2);
+let model_b = new noIdModel(params2);
+let model_c = new noIdModel({ str: 'test' });
+
+test ('Model equal', t => {
+
+    t.true( model_a.eq(model_a) );
+    t.true( model_a.eq(model_b) );
+    t.false( model_a.eq(model_c) );
+
+    model_c.arr = params2.arr;
+
+    t.true( model_a.eq(model_c) );
 });
