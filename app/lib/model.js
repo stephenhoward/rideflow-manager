@@ -134,7 +134,7 @@ class Model {
             let d = {};
 
             d[property] = data[property];
-            data     = d;
+            data        = d;
         }
 
         let promise = new Promise( (resolve,reject) => {
@@ -146,8 +146,8 @@ class Model {
             }
 
             axios.post( url, JSON.stringify(data), {
-                responseType    : 'json',
-                contentType : 'application/json; charset=utf-8',
+                responseType : 'json',
+                contentType  : 'application/json; charset=utf-8',
             }).then( (response) => {
                 let json = response.data;
                 for( let k of Object.keys(json) ) {
