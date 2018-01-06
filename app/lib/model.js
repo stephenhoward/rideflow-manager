@@ -66,12 +66,6 @@ class Model {
 
             this.properties[k] = v;
 
-            if ( this.id ) {
-                this.save(k).catch( error => {
-                    // TODO
-                });
-            }
-
             this.emit('model-changed');
         }
     }

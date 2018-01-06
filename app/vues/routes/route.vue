@@ -86,8 +86,8 @@ button.add_stop {
                     stop.once('model-saved', () => {
                         if ( stop.id ) {
                             self.model.stops.push( stop );
+                            self.model.save('stops');
                             self.new_stop = '';
-                            self.model = self.model;
                         }
                     });
                     self.addingStop = false;
