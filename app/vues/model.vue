@@ -44,7 +44,7 @@ ul {
                 let self = this;
 
                 if ( id ) {
-                    this.$models(this.type()).get(this.id).done( (model) => {
+                    this.$models(this.type()).get(this.id).then( (model) => {
                         self.model = model;
                     });
                 }

@@ -1,4 +1,5 @@
-let Models = require('./models.js');
+const Models  = require('./models.js');
+const axios = require('axios');
 
 function ModelSets() {
 
@@ -61,41 +62,54 @@ class ModelSet {
 
     get(id) {
         let self  = this;
-        let defer = $.Deferred();
 
-        if ( this.models[id] ) {
-            defer.resolve( this.models[id] );
-        }
-        else {
-            $.getJSON( this.type.url() + '/' + id )
-                .done( (json) => {
-                    self.models[id] = self._new(json);
-                    defer.resolve( this.models[id] );
-                });
-        }
+        return new Promise( (resolve,reject) => {
 
-        return defer.promise();
+            if ( self.models[id] ) {
+                resolve( self.models[id] );
+            }
+            else {
+                axios.get( this.type.url() + '/' + id, {
+                    responseType : 'json',
+                })
+                    .then( (response) => {
+                        let json = response.data;
+
+                        self.models[id] = self._new(json);
+                        resolve( this.models[id] );
+                    })
+                    .catch( (error) => {
+                        // TODO
+                    });
+            }
+        });
     }
 
     list(refresh) {
         let self  = this;
-        let defer = $.Deferred();
 
-        if ( Object.keys( this.models ).length && ! refresh ) {
-            defer.resolve( Object.values( this.models ) );
-        }
+        return new Promise( (resolve,reject) => {
 
-        $.getJSON( this.type.url() )
-            .done( (json) => {
+            if ( Object.keys( this.models ).length && ! refresh ) {
+                resolve( Object.values( this.models ) );
+            }
 
-                $.each(json, (i,item) => {
-                    self.models[ item.id ] = self._new(item);
+                axios.get( this.type.url(), {
+                    responseType : 'json',
                 })
+                    .then( (response) => {
+                        let json = response.data;
 
-                defer.resolve( Object.values( this.models ) );
-            });
+                        json.forEach( (item) => {
+                            self.models[ item.id ] = self._new(item);
+                        })
 
-        return defer.promise();
+                        resolve( Object.values( this.models ) );
+                    })
+                    .catch( (error) => {
+                        // TODO
+                    });
+        });
     }
 
     add(model) {
@@ -112,9 +126,9 @@ class ModelSet {
         let self  = this;
         let model = new this.type(item);
 
-        $(model)
+        model
             .on('model-deleted', function() {
-                $(this).off();
+                model.off();
 
                 delete self.models[ this.id ];
             })

@@ -35,13 +35,13 @@
         created: function() {
             let self = this;
 
-            self.$models('Route').list().done((routes) => {
+            self.$models('Route').list().then((routes) => {
                 self.routes = {};
                 for( let i = 0; i < routes.length; i++ ) {
                     self.routes[ routes[i].id ] = routes[i];
                 }
             });
-            self.$models('Stop').list().done((stops) => {
+            self.$models('Stop').list().then((stops) => {
                 for( let i = 0; i < stops.length; i++ ) {
                     let stop = stops[i];
 

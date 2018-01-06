@@ -137,7 +137,7 @@ class Model {
             data        = d;
         }
 
-        let promise = new Promise( (resolve,reject) => {
+        return new Promise( (resolve,reject) => {
 
             // nothing new to save:
             if( ! Object.keys(data).length ) {
@@ -161,15 +161,13 @@ class Model {
                 reject(error);
             });
         });
-
-        return promise;
     }
 
     delete() {
         let self  = this;
         let url   = self.constructor.url() + '/' + self.id;
 
-        let promise = new Promise( ( resolve, reject ) => {
+        return new Promise( ( resolve, reject ) => {
 
             // cannot delete something with no id
             if ( ! self.id ) {
@@ -190,8 +188,6 @@ class Model {
 
             }
         });
-
-        return promise;
     }
 
     dump() {

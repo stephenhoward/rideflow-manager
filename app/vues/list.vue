@@ -61,7 +61,7 @@
             fetchData: function() {
                 let self = this;
 
-                this.$models(this.type()).list().done( (models) => {
+                this.$models(this.type()).list().then( (models) => {
                     self.models = models;
                 });
             }

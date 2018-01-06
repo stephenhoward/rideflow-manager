@@ -29,11 +29,11 @@ export default {
     methods : {
         doLogin: function() {
             authorize.login(this.email,this.password)
-                .done(() => {
+                .then(() => {
                     this.err = '';
                     window.app.$router.push('/');
                 })
-                .fail((error) => {
+                .catch((error) => {
                     this.err = error;
                 });
         },

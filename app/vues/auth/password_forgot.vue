@@ -23,19 +23,18 @@ export default {
     },
     methods : {
         doReset: function() {
-            var self = this;
-            $.ajax({
-                    url         : '/v1/auth/reset',
-                    type        : 'POST',
+            let self = this;
+            let data = JSON.stringify({
+                email: this.email
+            });
+            axios.post( '/v1/auth/reset', data, {
                     contentType : 'application/json; charset=utf-8',
-                    data: JSON.stringify({
-                        email    : this.email
-                    })
-                }).done( (data) => {
+            })
+                .then( (response) => {
                     self.$router.push({ name:'reset_sent', params: { email: this.email } });
-                }).fail( (xhr) => {
-                    var json = JSON.parse(xhr.responseText);
-                    self.error = xhr.status;
+                })
+                .catch( (error) => {
+                    self.error = error.response.status;
                 });
         },
     }

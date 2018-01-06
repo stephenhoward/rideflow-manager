@@ -6,27 +6,25 @@ module.exports = {
 
     login :  (email,password) => {
 
-        var defer = $.Deferred();
-
-        $.ajax({
-            url         : '/v1/auth/token',
-            type        : 'POST',
-            contentType : 'application/json; charset=utf-8',
-            data: JSON.stringify({
+        return new Promise( (resolve,reject) => {
+            let data = JSON.stringify({
                 email    : email,
                 password : password
-            })
-        }).done( (data) => {
-            set_token(data);
-            defer.resolve(data);
+            });
 
-        }).fail( (xhr) => {
-            var json = JSON.parse(xhr.responseText);
-            unset_token();
-            defer.reject( xhr.status );
+            axios.post('/v1/auth/token', data, {
+                contentType : 'application/json; charset=utf-8',
+            }).then( (response) => {
+                set_token(response.data);
+                resolve(response.data);
+
+            }).catch( (error) => {
+                console.log(error);
+                var json = JSON.parse(error.responseText);
+                unset_token();
+                reject( error.response.status );
+            });
         });
-
-        return defer.promise();
     },
 
     logout: () => {
@@ -46,22 +44,6 @@ module.exports = {
     }
 };
 
-$.ajaxSetup({
-    beforeSend: (xhr) => {
-        let jwt = sessionStorage.getItem('jwt');
-        if ( jwt ) {
-            xhr.setRequestHeader( 'Authorization', 'Bearer ' + jwt );
-        }
-    },
-    statusCode: {
-        401: (xhr,err,error_text) => {
-            console.log('need to log in');
-            console.log(error_text);
-            window.app.$router.push({ name: 'login', params: { error: xhr.status } });
-        }
-    }
-});
-
 axios.interceptors.request.use( (config) => {
     let jwt = sessionStorage.getItem('jwt');
     if ( jwt ) {
@@ -69,6 +51,17 @@ axios.interceptors.request.use( (config) => {
     }
     return config;
 });
+axios.interceptors.response.use(
+    (response) => { return response },
+    (error)    => {
+
+        // need to log in:
+        if ( error.response && error.response.status == 401 ) {
+            window.app.$router.push({ name: 'login', params: { error: xhr.status } });
+        }
+        return Promise.reject(error);
+    }
+);
 
 if ( sessionStorage.getItem('jwt') ) {
     set_token( sessionStorage.getItem('jwt') );
@@ -80,15 +73,13 @@ function refresh_login(timeout) {
     if ( timer > 0 ) {
 
         refresh_timer = setTimeout( () => {
-            $.ajax({
-                url  : '/v1/auth/token',
-                type : 'GET',
-            }).done( (data) => {
-                set_token(data);
-            }).fail( (xhr) => {
-                var json = JSON.parse(xhr.responseText);
-                unset_token();
-            });
+            axios.get('/v1/auth/token', {} )
+                .then( (response) => {
+                    set_token(response.data);
+                })
+                .catch( (error) => {
+                    unset_token();
+                });
         }, timer * 1000 );
     }
     else {
