@@ -81,7 +81,7 @@ button.add_stop {
             addStop() {
                 let self = this;
                 self.addingStop = true;
-                self.$map.addStop(this.model).done((stop) => {
+                self.$map.addStop(this.model).then((stop) => {
                     self.new_stop = stop;
                     stop.once('model-saved', () => {
                         if ( stop.id ) {
@@ -91,6 +91,9 @@ button.add_stop {
                         }
                     });
                     self.addingStop = false;
+                })
+                .catch( () => {
+                    // TODO
                 });
             },
             cancelAddStop() {

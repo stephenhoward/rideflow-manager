@@ -49,7 +49,7 @@ RideFlowMap.extendMap = (map) => {
 
         let old_defer = RideFlowMap.modes[mode];
 
-        if ( old_defer ) {
+        if ( old_defer && old_defer.reject ) {
             old_defer.reject();
         }
 
@@ -72,42 +72,35 @@ RideFlowMap.extendMap = (map) => {
         return defer;
     };
     map.cancelMode = (mode) => {
-        if ( mode in RideFlowMap.modes ) {
-            map._mode = '';
-            if ( RideFlowMap.modes[mode] ) {
-                RideFlowMap.modes[mode].reject();
-            }
-            RideFlowMap.modes[mode] = null;
-        }
-        else {
-            invalidMode(mode);
+
+        let defer = map.clearMode(mode);
+
+        if ( defer && defer.reject ) {
+            defer.reject();
         }
     };
 
     let addStop = (e) => {
 
-        let stop = new Models.Stop({ location: [e.latlng.lat,e.latlng.lng] });
-
-        let defer  = map.clearMode(map.mode);
+        let stop  = new Models.Stop({ location: [e.latlng.lat,e.latlng.lng] });
+        let defer = map.clearMode(map.mode);
 
         map.off('click',addStop);
 
-        if ( defer ) {
+        if ( defer && defer.resolve ) {
             defer.resolve(stop);
         }
         
-        $(map).trigger('add-stop', stop);
+        map.fire('add-stop', { stop } );
     }
 
     map.addStop = () => {
 
-        let defer = $.Deferred();
+        return new Promise( (resolve,reject) => {
 
-        map.setMode('AddStop',defer);
-
-        map.on('click', addStop );
-
-        return defer.promise();
+            map.setMode('AddStop',{ resolve, reject } );
+            map.on('click', addStop );
+        })
     };
 
     map.cancelAddStop = () => {

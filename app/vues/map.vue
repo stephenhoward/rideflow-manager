@@ -75,7 +75,8 @@
                         self.$router.push('/');
                     }
                 });
-                $(self.$map).on('add-stop', (e,stop) => {
+                self.$map.on('add-stop', (e) => {
+                    let stop = e.stop;
                     self.stops.push(stop);
                     stop.on('model-deleted', () => {
                         self.stops = self.stops.filter( (item) => { return stop.id != item.id } );
