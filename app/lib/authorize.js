@@ -20,7 +20,6 @@ module.exports = {
 
             }).catch( (error) => {
                 console.log(error);
-                var json = JSON.parse(error.responseText);
                 unset_token();
                 reject( error.response.status );
             });
@@ -57,7 +56,7 @@ axios.interceptors.response.use(
 
         // need to log in:
         if ( error.response && error.response.status == 401 ) {
-            window.app.$router.push({ name: 'login', params: { error: xhr.status } });
+            window.app.$router.push({ name: 'login', params: { error: error.response.status } });
         }
         return Promise.reject(error);
     }
