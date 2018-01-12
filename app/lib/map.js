@@ -80,26 +80,29 @@ RideFlowMap.extendMap = (map) => {
         }
     };
 
+    map.resolveMode = function() {
+            let defer = map.clearMode(map.mode);
+            let args = [].slice.call(arguments);
+
+            if ( defer && defer.resolve ) {
+                defer.resolve.apply(null,args);
+            }
+    };
+
     let addStop = (e) => {
 
         let stop  = new Models.Stop({ location: [e.latlng.lat,e.latlng.lng] });
-        let defer = map.clearMode(map.mode);
 
-        map.off('click',addStop);
-
-        if ( defer && defer.resolve ) {
-            defer.resolve(stop);
-        }
-        
+        map.resolveMode(stop);
         map.fire('add-stop', { stop } );
-    }
+    };
 
     map.addStop = () => {
 
         return new Promise( (resolve,reject) => {
 
             map.setMode('AddStop',{ resolve, reject } );
-            map.on('click', addStop );
+            map.once('click', addStop );
         })
     };
 

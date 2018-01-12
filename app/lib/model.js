@@ -266,19 +266,46 @@ class ModelList {
             self[i] = model;
 
             if ( model instanceof Model ) {
-                model.on('model-deleted',() => { self.remove(model); } );
+                model.on('model-deleted', () => { self.remove(model); } );
             }
         }
 
         Emitter(this);
     }
 
+    has(item) {
+
+        let matches = this.array.filter(
+            ( item instanceof Model )
+                ? (object) => { return item.id == object.id }
+                : (object) => { item === object }
+        );
+
+        console.log(matches);
+
+        return matches.length ? true : false;
+    }
+
     push(item) {
-        return this._mutate( (arr) => { arr.push(item) } );
+        return this._mutate( (arr) => {
+            console.log(this);
+            console.log( item instanceof Model );
+            console.log( this.has(item) );
+            if( ! (item instanceof Model) || ! this.has(item) ) {
+                console.log('pushing');
+              arr.push(item);
+            }
+        });
     }
 
     concat(items) {
-        return this._mutate( (arr) => { arr.concat(items) } );
+        return this._mutate( (arr) => {
+            items.forEach( (item) => {
+                if( ! (item instanceof Model) || ! this.has(item) ) {
+                  arr.push(item);
+                }
+            });
+        });
     }
 
     remove(item) {
@@ -312,7 +339,11 @@ class ModelList {
     }
 
     unshift(item) {
-        return this._mutate( (arr) => { arr.unshift(item) } );
+        return this._mutate( (arr) => {
+            if( ! (item instanceof Model) || ! this.has(item) ) {
+                arr.unshift(item);
+            }
+        });
     }
 
     eq(arr) {
@@ -359,7 +390,7 @@ class ModelList {
 
         let arr = this._copy_items();
 
-        let result = mutate(arr);
+        let result = mutate.call(this,arr);
         let update = this._replaceList(arr);
 
         return result ? result : update;

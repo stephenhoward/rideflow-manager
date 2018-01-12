@@ -82,14 +82,21 @@ button.add_stop {
                 let self = this;
                 self.addingStop = true;
                 self.$map.addStop(this.model).then((stop) => {
-                    self.new_stop = stop;
-                    stop.once('model-saved', () => {
-                        if ( stop.id ) {
-                            self.model.stops.push( stop );
-                            self.model.save('stops');
-                            self.new_stop = '';
-                        }
-                    });
+
+                    if ( stop.id ) {
+                        self.model.stops.push( stop );
+                        self.model.save('stops');
+                    }
+                    else {
+                        self.new_stop = stop;
+                        stop.once('model-saved', () => {
+                            if ( stop.id ) {
+                                self.model.stops.push( stop );
+                                self.model.save('stops');
+                                self.new_stop = '';
+                            }
+                        });
+                    }
                     self.addingStop = false;
                 })
                 .catch( () => {

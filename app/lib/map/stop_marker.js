@@ -37,6 +37,13 @@ class StopMarker {
 
         let self = this;
 
+        this.on('click', (e) => {
+
+            if ( map.mode == 'AddStop' ) {
+
+                map.resolveMode(self.stop);
+            }
+        });
         this.on('moveend', (e) => {
 
             self.moveTo( self.marker.getLatLng() );
@@ -64,6 +71,12 @@ class StopMarker {
     on(event,handler) {
 
         this.marker.on(event,handler);
+
+        return this;
+    }
+
+    off(event,handler) {
+        this.marker.off(event,handler);
 
         return this;
     }
