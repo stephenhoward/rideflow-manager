@@ -44,7 +44,12 @@ button.add_stop {
             <input v-if="mode == 'edit'" type="text" v-model="model.name" v-bind:placeholder=" model.id ? $t('route_name') : $t('new_route_name') ">
             <span v-else >{{ model.name }}</span>
         </h2>
-        <ul>
+        <select v-if="mode == 'edit'" v-model="model.color">
+            <option value="">Select a Color</option>
+            <option v-for="color in colors" :value="color">{{ color }}</option>
+        </select>
+
+        <ul :class=" 'stops' + ( model.color ? ' route' + model.color : '' ) ">
             <stop-summary v-bind:listlength="model.stops ? model.stops.length : 0" v-for="stop in model.stops.array" :key="stop.id" :model="stop"></stop-summary>
             <stop-summary v-if="new_stop" v-bind:listlength="1" :model="new_stop"></stop-summary>
         </ul>
@@ -66,7 +71,8 @@ button.add_stop {
         data: () => {
             return {
                 new_stop: null,
-                addingStop: false
+                addingStop: false,
+                colors: ['Red','Green','Blue','Orange','Yellow','Purple','Pink','Silver','Gold','Gray','Black']
             };
         },
         methods: {

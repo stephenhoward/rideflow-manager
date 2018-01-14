@@ -13,7 +13,10 @@ ul {
             <button v-if="mode == 'edit'" v-on:click="finishEditing" type="button" >{{ $t("done_editing") }}</button>
             <button v-else v-on:click="editItem" type="button" >{{ $t("edit_me") }}</button>
         </div>
-        <model-view :model="model" :mode="mode"></model-view>
+        <div v-if="loading">
+            {{ $t('loading') }}
+        </div>
+        <model-view v-else :model="model" :mode="mode"></model-view>
         <button v-if="mode == 'edit'" v-on:click="deleteItem" type="button" >{{ $t("delete_me", { type: type() } ) }}</button>
     </aside>
 </template>
@@ -44,8 +47,10 @@ ul {
                 let self = this;
 
                 if ( id ) {
+                    this.loading = true;
                     this.$models(this.type()).get(this.id).then( (model) => {
-                        self.model = model;
+                        self.model   = model;
+                        self.loading = false;
                     });
                 }
                 else {
@@ -57,7 +62,6 @@ ul {
 
                 this.model.save().then( () => {
                     self.$models( this.type() ).add(this.model);
-                    self.$router.go(-1);
                 });
             },
             cancelEdit: function() {
@@ -86,6 +90,7 @@ ul {
         i18n: {
             messages: {
                 en: {
+                    loading: 'Loading...',
                     edit_me: 'Edit',
                     delete_me: 'Delete {type}',
                     nav_back: 'Back',

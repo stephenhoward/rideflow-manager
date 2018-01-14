@@ -33,6 +33,7 @@ let Ride = Model.subclass( '', {
 let Route = Model.subclass( '/v1/routes', {
     "id" : '',
     "name" : '',
+    "color": '',
     "path" : [],
     "stops" : []
 });

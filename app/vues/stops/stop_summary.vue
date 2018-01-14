@@ -1,71 +1,130 @@
-<style lang="sass" scoped>
-li {
-    position: relative;
-    padding: 7px 10px 7px 24px;
-    span.stop-icon {
-        display: inline-block;
-        border-left: 2px solid #777;
-        position: absolute;
-        left: 10px;
-        top: 0px;
-        height: 100%;
-        padding-top: 10px;
-        span {
+<style lang="sass">
+ul.stops {
+
+    li {
+        position: relative;
+        padding: 7px 10px 7px 24px;
+        span.stop-icon {
             display: inline-block;
-            width: 12px;
-            height: 12px;
-            border: 2px solid #777;
-            border-radius: 10px;
-            background-color: white;
-            margin-left: -7px;
-        }
-    }
-    &.single {
-        span.stop-icon {
-            border: none;
-        }
-    }
-    &:nth-child(1) {
-        span.stop-icon {
-            height: 20px;
-            bottom: 0;
-            top: auto;
-            padding: 0;
+            border-left: 4px solid #777;
+            position: absolute;
+            left: 10px;
+            top: 0px;
+            height: 100%;
+            padding-top: 10px;
             span {
-                margin-top: -3px;
+                display: inline-block;
+                width: 12px;
+                height: 12px;
+                border: 2px solid #777;
+                border-radius: 10px;
+                background-color: white;
+                margin-left: -8px;
+            }
+        }
+        &.single {
+            span.stop-icon {
+                border: none;
+            }
+        }
+        &:nth-child(1) {
+            span.stop-icon {
+                height: 20px;
+                bottom: 0;
+                top: auto;
+                padding: 0;
+                span {
+                    margin-top: -3px;
+                }
+            }
+        }
+        &:last-child {
+            span.stop-icon {
+                height: 20px;
+            }
+        }
+        &.editing {
+            border-top: 1px solid #aaa;
+            border-bottom: 1px solid #aaa;
+            margin: 0 -10px;
+            padding-left: 34px;
+            background-color: rgba(200,200,200,.2);
+            box-shadow: inset 0px 1px 3px rgba(0,0,0,.2);
+            input {
+                width: 100%;
+                font-size: 10pt;
+            }
+            span.stop-icon {
+                top: 15px;
+                left: 20px;
+                bottom: auto;
+            }
+            div.button-group {
+                margin-top: 6px;
+                button {
+                    font-size: 9pt;
+                    padding: 2px 6px;
+                }
             }
         }
     }
-    &:last-child {
-        span.stop-icon {
-            height: 20px;
+    &.routeRed {
+        li span.stop-icon {
+            border-color: #f22;
         }
     }
-    &.editing {
-        border-top: 1px solid #aaa;
-        border-bottom: 1px solid #aaa;
-        margin: 0 -10px;
-        padding-left: 34px;
-        background-color: rgba(200,200,200,.2);
-        box-shadow: inset 0px 1px 3px rgba(0,0,0,.2);
-        input {
-            width: 100%;
-            font-size: 10pt;
+    &.routeGreen {
+        li span.stop-icon {
+            border-color: #2f2;
         }
-        span.stop-icon {
-            top: 15px;
-            left: 20px;
-            bottom: auto;
+    }
+    &.routeBlue {
+        li span.stop-icon {
+            border-color: #22f;
         }
-        div.button-group {
-            margin-top: 6px;
-            button {
-                font-size: 9pt;
-                padding: 2px 6px;
-            }
+    }
+    &.routeOrange {
+        li span.stop-icon {
+            border-color: #f90;
+        }
+    }
+    &.routeYellow {
+        li span.stop-icon {
+            border-color: #ee0;
+        }
+    }
+    &.routePurple {
+        li span.stop-icon {
+            border-color: #0cc;
+        }
+    }
+    &.routePink {
+        li span.stop-icon {
+            border-color: #faa;
+        }
+    }
+    &.routeSilver {
+        li span.stop-icon {
+            border-color: #ccc;
+        }
+    }
+    &.routeGold {
+        li span.stop-icon {
+            border-color: #a90;
+        }
+    }
+    &.routeGray {
+        li span.stop-icon {
+            border-color: #aaa;
+        }
+    }
+    &.routeBlack {
+        li span.stop-icon {
+            border-color: #000;
         }
     }
 }
+
 </style>
 
 <template>
