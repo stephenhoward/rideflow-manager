@@ -4,6 +4,8 @@ ul.stops {
     li {
         position: relative;
         padding: 7px 10px 7px 24px;
+        display: flex;
+        flex-direction: row;
         span.stop-icon {
             display: inline-block;
             border-left: 4px solid #777;
@@ -43,7 +45,12 @@ ul.stops {
                 height: 20px;
             }
         }
+        span.label {
+            display: inline-block;
+            flex: 1 1 auto;
+        }
         &.editing {
+            display: block;
             border-top: 1px solid #aaa;
             border-bottom: 1px solid #aaa;
             margin: 0 -10px;
@@ -55,8 +62,9 @@ ul.stops {
                 font-size: 10pt;
             }
             span.stop-icon {
+                border: none;
                 top: 15px;
-                left: 20px;
+                left: 24px;
                 bottom: auto;
             }
             div.button-group {
@@ -135,13 +143,14 @@ ul.stops {
             <button @click="saveStop">{{ $t('save_stop') }}</button>
             <button @click="cancelStop">{{ $t('cancel_edit') }}</button>
         </div>
-        <span v-else> {{ model.name }} </span>
+        <span class="label" v-else> {{ model.name }} </span>
+        <span v-if="parent_mode == 'edit' && mode != 'edit'" class="la la-edit" @click="startEdit"></span>
     </li>
 </template>
 
 <script>
     export default {
-        props: ['model','listlength'],
+        props: ['parent_mode','model','listlength'],
         data: function() {
             return {
                 mode: ''
@@ -149,10 +158,13 @@ ul.stops {
         },
         created : function() {
             if ( ! this.model.name ) {
-                this.mode = 'edit';
+                this.startEdit();
             }
         },
         methods: {
+            startEdit() {
+                this.mode = 'edit';
+            },
             saveStop() {
                 let self = this;
                 if ( this.model.name ) {
@@ -169,11 +181,9 @@ ul.stops {
                 if ( ! this.model.id ) {
                     this.model.delete();
                 }
+                this.mode = '';
 
             }
-        },
-        components: {
-            'stop-editor': require('../stops/stop.vue')
         },
         i18n: {
             messages: {

@@ -79,6 +79,7 @@ class ModelSet {
                         resolve( this.models[id] );
                     })
                     .catch( (error) => {
+                        console.log(error);
                         // TODO
                     });
             }
@@ -107,6 +108,7 @@ class ModelSet {
                         resolve( Object.values( this.models ) );
                     })
                     .catch( (error) => {
+                        console.log(error);
                         // TODO
                     });
         });

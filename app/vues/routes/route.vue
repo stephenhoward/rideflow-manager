@@ -50,8 +50,8 @@ button.add_stop {
         </select>
 
         <ul :class=" 'stops' + ( model.color ? ' route' + model.color : '' ) ">
-            <stop-summary v-bind:listlength="model.stops ? model.stops.length : 0" v-for="stop in model.stops.array" :key="stop.id" :model="stop"></stop-summary>
-            <stop-summary v-if="new_stop" v-bind:listlength="1" :model="new_stop"></stop-summary>
+            <stop-summary :parent_mode="mode" :listlength="model.stops ? model.stops.length : 0" v-for="stop in model.stops.array" :key="stop.id" :model="stop"></stop-summary>
+            <stop-summary v-if="new_stop" :listlength="1" :model="new_stop"></stop-summary>
         </ul>
 
         <p v-if="addingStop" class="adding_stop">

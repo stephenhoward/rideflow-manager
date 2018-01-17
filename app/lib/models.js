@@ -25,9 +25,13 @@ let Ride = Model.subclass( '', {
     "id" : '',
     "location" : [],
     "pass_type" : '',
-    "route_session" : null,
+    "route_session" : {
+        type: 'RouteSession'
+    },
     "timestamp" : '',
-    "token" : null
+    "token" : {
+        type: 'Pass'
+    }
 });
 
 let Route = Model.subclass( '/v1/routes', {
@@ -35,31 +39,48 @@ let Route = Model.subclass( '/v1/routes', {
     "name" : '',
     "color": '',
     "path" : [],
-    "stops" : []
+    "stops" : {
+        type    : 'Array',
+        items   : 'Stop'
+    }
 });
 
 let RouteSession = Model.subclass( '/v1/sessions', {
     "bearing" : 0,
     "date_updated" : '',
-    "driver" : null,
+    "driver" : {
+        type: 'User'
+    },
     "heading" : '',
     "id" : '',
     "location" : [],
-    "rides" : [],
-    "route" : null,
+    "rides" : {
+        type: 'Array',
+        items: 'Ride'
+    },
+    "route" : {
+        type: 'Route'
+    },
     "session_end" : '',
     "session_start" : '',
-    "vehicle" : null
+    "vehicle" : {
+        type: 'Vehicle'
+    }
 
 });
 
 let Stop = Model.subclass( '/v1/stops', {
-    "arrival" : null,
+    "arrival" : {
+        type: 'Arrival'
+    },
     "date_updated" : '',
     "id" : '',
     "location" : [],
     "name" : '',
-    "routes" : []
+    "routes" : {
+        type: 'Array',
+        items: 'Route'
+    }
 });
 
 let User = Model.subclass( '', {
@@ -72,9 +93,17 @@ let Vehicle = Model.subclass( '/v1/vehicles', {
     "id" : '',
     "name" : '',
     "notes" : '',
-    "sessions" : [],
+    "sessions" : {
+        type: 'Array',
+        items: 'RouteSession'
+    },
     "type" : ''
 });
 
 
-module.exports = { Arrival, Pass, Ride, Route, RouteSession, Stop, User, Vehicle };
+let types = { Arrival, Pass, Ride, Route, RouteSession, Stop, User, Vehicle };
+
+Model.add_types( types );
+
+module.exports = types;
+

@@ -1,6 +1,8 @@
 const Emitter = require('component-emitter');
 const axios   = require('axios');
 
+let ModelTypes = {};
+
 class Model {
     constructor(properties) {
         Emitter(this);
@@ -28,8 +30,10 @@ class Model {
 
         if ( k in definition ) {
 
+            v = this._normalizeValue(v, definition[k]);
+
             // special book-keeping for list properties
-            if ( Array.isArray(definition[k]) ) {
+            if ( Array.isArray(v) ) {
                 this._set_list(k,v,nodirty);
             }
             else if ( this.properties[k] !== v ) {
@@ -88,6 +92,41 @@ class Model {
 
                     delete this.dirty[k];
                 }
+    }
+
+    _normalizeValue(value,definition) {
+        let self = this;
+
+        if ( value == null ) {
+            return value;
+        }
+
+        if ( Array.isArray(definition) ) {
+            if ( ! Array.isArray(value) ) {
+                return [ value ];
+            }
+
+            return value;
+        }
+        else if ( definition instanceof Object ) {
+
+            if ( definition.type == 'Array' ) {
+                if ( ! Array.isArray(value) ) {
+                    value = [ value ];
+                }
+
+                return value.map( (item) => {
+                    return self._normalizeValue(item, { type: definition.items })
+                } );
+            }
+            else {
+                if ( ! ( value instanceof ModelTypes[definition.type] ) ) {
+                    value = new ModelTypes[definition.type]( value );
+                }
+            }
+        }
+
+        return value;
     }
 
     revert() {
@@ -245,6 +284,14 @@ class Model {
         }
 
         return Subclass;
+    }
+
+    static add_types(types) {
+        Object.keys(types).forEach( (name) => {
+            ModelTypes[name] = types[name];
+        } );
+
+        return ModelTypes;
     }
 }
 
