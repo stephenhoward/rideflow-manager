@@ -153,13 +153,13 @@ class Model {
         // only send what we need to:
         let data = {};
         if ( self.id ) {
-            let all_data = self.dump();
+            let all_data = self.dump(true);
             for ( let k in self.dirty ) {
                 data[k] = all_data[k];
             }
         }
         else {
-            data = self.dump();
+            data = self.dump(true);
         }
 
         // looking to only save 1 property:
@@ -223,17 +223,23 @@ class Model {
         });
     }
 
-    dump() {
+    dump(skip_readonly) {
         let data = {};
+        let def  = this.definition();
 
         for( let k in this.properties ) {
-            let v = this.properties[k];
 
-            if ( v instanceof Model || v instanceof ModelList ) {
-                data[k] = v.dump();
-            }
-            else {
-                data[k] = v;
+            let is_readonly = def[k] instanceof Object && def[k].readOnly;
+
+            if ( ! skip_readonly || ! is_readonly ) {
+                let v = this.properties[k];
+
+                if ( v instanceof Model || v instanceof ModelList ) {
+                    data[k] = v.dump(skip_readonly);
+                }
+                else {
+                    data[k] = v;
+                }
             }
         }
 
@@ -328,16 +334,11 @@ class ModelList {
                 : (object) => { item === object }
         );
 
-        console.log(matches);
-
         return matches.length ? true : false;
     }
 
     push(item) {
         return this._mutate( (arr) => {
-            console.log(this);
-            console.log( item instanceof Model );
-            console.log( this.has(item) );
             if( ! (item instanceof Model) || ! this.has(item) ) {
                 console.log('pushing');
               arr.push(item);
@@ -420,13 +421,13 @@ class ModelList {
         return true;
     }
 
-    dump() {
+    dump(skip_readonly) {
         let arr = this._copy_items();
 
         for( let i=0; i < arr.length; i++ ) {
 
             if ( arr[i] instanceof Model ) {
-                arr[i] = arr[i].dump();
+                arr[i] = arr[i].dump(skip_readonly);
             }
         }
 

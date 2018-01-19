@@ -79,7 +79,8 @@ let Stop = Model.subclass( '/v1/stops', {
     "name" : '',
     "routes" : {
         type: 'Array',
-        items: 'Route'
+        items: 'Route',
+        readOnly: true
     }
 });
 
