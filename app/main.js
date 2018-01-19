@@ -10,6 +10,10 @@ let App         = require('./vues/app.vue');
 Vue.use(ModelSets);
 Vue.use(RideFlowMap);
 
+let DragDrop = require('vue-drag-drop');
+Vue.component( 'drag', DragDrop.Drag );
+Vue.component( 'drop', DragDrop.Drop );
+
 window.app = new Vue({
     render: h => h(App),
     router : new VueRouter({

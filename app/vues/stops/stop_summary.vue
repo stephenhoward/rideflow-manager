@@ -4,8 +4,16 @@ ul.stops {
     li {
         position: relative;
         padding: 7px 10px 7px 24px;
-        display: flex;
-        flex-direction: row;
+        & > div {
+            display: flex;
+            flex-direction: row;
+            &[draggable=true] {
+                cursor: move;
+            }
+        }
+        span.click-to-edit {
+            cursor: pointer;
+        }
         span.stop-icon {
             display: inline-block;
             border-left: 4px solid #777;
@@ -45,18 +53,26 @@ ul.stops {
                 height: 20px;
             }
         }
+        &.dragover {
+            border-top: 2px solid #ccc;
+            * {
+                pointer-events: none;
+            }
+        }
         span.label {
             display: inline-block;
             flex: 1 1 auto;
         }
         &.editing {
-            display: block;
             border-top: 1px solid #aaa;
             border-bottom: 1px solid #aaa;
             margin: 0 -10px;
             padding-left: 34px;
             background-color: rgba(200,200,200,.2);
             box-shadow: inset 0px 1px 3px rgba(0,0,0,.2);
+            & > div {
+                display: block;
+            }
             input {
                 width: 100%;
                 font-size: 10pt;
@@ -136,7 +152,17 @@ ul.stops {
 </style>
 
 <template>
-    <li v-bind:class=" ( listlength > 1 ? '' : 'single ' ) + ( mode == 'edit' ? 'editing ' : '' ) + 'stop-summary' ">
+    <drop tag="li" :class="
+        ( list.length == 1 ? 'single '   : '' ) +
+        ( mode == 'edit'   ? 'editing '  : '' ) +
+        ( dragover == true ? 'dragover ' : '' ) +
+        'stop-summary' "
+
+        @dragenter="dragover=true"
+        @dragleave="dragover=false"
+        @drop="handleDrop">
+
+        <drag :draggable="parent_mode == 'edit' && mode != 'edit' ? true : false" :transferData="{ stop: model }">
         <span class="stop-icon" aria-hidden="true"><span></span></span>
         <input v-if="mode == 'edit'" type="text" v-model="model.name" v-bind:placeholder=" model.id ?  $t('stop_name') : $t('new_stop_name') ">
         <div class="button-group" v-if="mode == 'edit'">
@@ -144,16 +170,19 @@ ul.stops {
             <button @click="cancelStop">{{ $t('cancel_edit') }}</button>
         </div>
         <span class="label" v-else> {{ model.name }} </span>
-        <span v-if="parent_mode == 'edit' && mode != 'edit'" class="la la-edit" @click="startEdit"></span>
-    </li>
+        <span v-if="parent_mode == 'edit' && mode != 'edit'" class="click-to-edit la la-edit" @click="startEdit"></span>
+        </drag>
+    </drop>
 </template>
 
 <script>
+
     export default {
-        props: ['parent_mode','model','listlength'],
+        props: ['parent_mode','model','list'],
         data: function() {
             return {
-                mode: ''
+                mode: '',
+                dragover: false
             };
         },
         created : function() {
@@ -162,6 +191,12 @@ ul.stops {
             }
         },
         methods: {
+            handleDrop(data) {
+                if ( data.stop.id != this.model.id ) {
+                    this.list.move(data.stop, this.list.indexOf(this.model) );
+                }
+                this.dragover = false;
+            },
             startEdit() {
                 this.mode = 'edit';
             },

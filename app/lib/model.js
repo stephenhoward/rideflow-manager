@@ -369,6 +369,24 @@ class ModelList {
         } ) );
     }
 
+    move(item,index) {
+        let current_index = this.indexOf(item);
+
+        // nothing to do
+        if ( index == current_index ) {
+            return;
+        }
+
+        if ( current_index > 0 && index > current_index ) {
+            index--;
+        }
+
+        return this._mutate( (arr) => {
+            arr.splice(current_index,1);
+            arr.splice(index,0,item);
+        });
+    }
+
     pop() {
         if ( this.length ) {
             return this._mutate( (arr) => { return arr.pop() } );
@@ -392,6 +410,24 @@ class ModelList {
                 arr.unshift(item);
             }
         });
+    }
+
+    indexOf(item) {
+        for ( let i=0; i<this.length; i++) {
+
+            if ( item instanceof Model) {
+
+                if ( this[i].id == item.id ) {
+                    return i;
+                }
+            }
+            else if ( this[i] === item ) {
+
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     eq(arr) {
