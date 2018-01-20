@@ -21,10 +21,6 @@ class Model {
         }
     }
 
-    definition() {
-        return {};
-    }
-
     _set(k,v,nodirty) {
         let definition = this.definition();
 
@@ -137,7 +133,7 @@ class Model {
             delete this.dirty[k];
         }
 
-        if ( keys_changed ) {
+        if ( keys_changed.length ) {
             this.emit('model-changed');
         }
     }
@@ -328,19 +324,14 @@ class ModelList {
 
     has(item) {
 
-        let matches = this.array.filter(
-            ( item instanceof Model )
-                ? (object) => { return item.id == object.id }
-                : (object) => { item === object }
-        );
+        let index = this.indexOf(item);
 
-        return matches.length ? true : false;
+        return index >= 0 ? true : false;
     }
 
     push(item) {
         return this._mutate( (arr) => {
             if( ! (item instanceof Model) || ! this.has(item) ) {
-                console.log('pushing');
               arr.push(item);
             }
         });
@@ -372,13 +363,9 @@ class ModelList {
     move(item,index) {
         let current_index = this.indexOf(item);
 
-        // nothing to do
-        if ( index == current_index ) {
+        // nothing to do, or trying to move something not present
+        if ( current_index < 0 || index == current_index ) {
             return;
-        }
-
-        if ( current_index > 0 && index > current_index ) {
-            index--;
         }
 
         return this._mutate( (arr) => {
@@ -421,7 +408,7 @@ class ModelList {
                     return i;
                 }
             }
-            else if ( this[i] === item ) {
+            else if ( this[i] == item ) {
 
                 return i;
             }
@@ -477,7 +464,7 @@ class ModelList {
         let result = mutate.call(this,arr);
         let update = this._replaceList(arr);
 
-        return result ? result : update;
+        return result !== undefined ? result : update;
     }
 
     _replaceList(arr) {

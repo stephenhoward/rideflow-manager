@@ -30,7 +30,23 @@ test('Model accessors', t => {
 test('Model dump', t => {
 
     t.deepEqual(model.dump(),params);
+    t.deepEqual(model.arr.dump(),params.arr);
 });
+
+test('Model useless revert', t => {
+   model.revert();
+   t.deepEqual(model.dump(),params); 
+});
+
+test('Model add_type check', t => {
+    let types = Model.add_types( { TestModel } );
+    let model = new types.TestModel(params);
+
+    t.deepEqual(Object.keys(types),['TestModel']);
+    t.deepEqual(model.dump(),params);
+});
+
+
 
 let model2  = new TestModel(params);
 
@@ -52,9 +68,10 @@ test('Modify list attribute', t => {
     t.deepEqual(model2.arr.dump(),[4,5,6]);
 });
 
-let model3 = new TestModel(params);
 
 test('Model Reversion', t => {
+    let model3 = new TestModel(params);
+
     model3.str='fiz';
     model3.arr=[];
     t.notDeepEqual(model3.dump(),params);
@@ -62,10 +79,11 @@ test('Model Reversion', t => {
     t.deepEqual(model3.dump(),params);
 });
 
-let model4 = new TestModel(params);
-let model5 = new TestModel(params);
 
 test('Model equal by id', t => {
+    let model4 = new TestModel(params);
+    let model5 = new TestModel(params);
+
     t.true( model4.eq(model4) );
     t.true( model4.eq(model5) );
     t.true( model5.eq(model4) );
@@ -75,21 +93,21 @@ test('Model equal by id', t => {
 
 });
 
-let noIdModel = Model.subclass(
-    '/v1/test',
-    {
-        arr: [],
-        str: ''
-    }
-);
-
-let params2 = { arr: [0,1,2], str: 'test' };
-
-let model_a = new noIdModel(params2);
-let model_b = new noIdModel(params2);
-let model_c = new noIdModel({ str: 'test' });
-
 test ('Model equal', t => {
+
+    let noIdModel = Model.subclass(
+        '/v1/test',
+        {
+            arr: [],
+            str: ''
+        }
+    );
+
+    let params2 = { arr: [0,1,2], str: 'test' };
+
+    let model_a = new noIdModel(params2);
+    let model_b = new noIdModel(params2);
+    let model_c = new noIdModel({ str: 'test' });
 
     t.true( model_a.eq(model_a) );
     t.true( model_a.eq(model_b) );
