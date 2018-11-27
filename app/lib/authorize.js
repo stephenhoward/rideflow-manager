@@ -40,7 +40,29 @@ module.exports = {
             }
         }
         return false;
+    },
+
+    reset_password: ( email ) => {
+
+        return new Promise( ( resolve, reject ) => {
+            let data = JSON.stringify({
+                email: email
+            });
+
+            axios.post( '/v1/auth/reset', data, {
+                    contentType : 'application/json; charset=utf-8',
+            })
+                .then( (response) => {
+                    resolve(response.data);
+                })
+                .catch( (error) => {
+                    console.log(error);
+                    reject( error.response.status );
+                });
+
+        });
     }
+
 };
 
 axios.interceptors.request.use( (config) => {

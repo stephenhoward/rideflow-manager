@@ -9,6 +9,7 @@
 </template>
 
 <script>
+const authorize = require('../../lib/authorize.js');
 
 export default {
     props    : ['em'],
@@ -24,12 +25,8 @@ export default {
     methods : {
         doReset: function() {
             let self = this;
-            let data = JSON.stringify({
-                email: this.email
-            });
-            axios.post( '/v1/auth/reset', data, {
-                    contentType : 'application/json; charset=utf-8',
-            })
+
+            authorize.reset_password( this.email )
                 .then( (response) => {
                     self.$router.push({ name:'reset_sent', params: { email: this.email } });
                 })

@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@kazupon/vue-i18n-loader": "0.2.1",
+    "node-sass": "4.11.0",
     "axios": "^0.17.1",
     "babel-core": "^6.17.0",
     "babel-plugin-transform-runtime": "^6.23.0",
@@ -22,7 +23,6 @@
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
     "leaflet": "1.2.0",
-    "node-sass": "^4.7.2",
     "sass-brunch": "^2.10.4",
     "vue": "^2.5.13",
     "vue-brunch": "^2.0.1",
