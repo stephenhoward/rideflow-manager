@@ -22,22 +22,28 @@ module.exports = {
                 nav: 'Vehicles'
             },
             login: {
-              title: 'Please Login',
-              email: 'Email',
-              password: 'Password',
-              login: 'login',
-              forgot_password: 'forgot your password?'
+                title: 'Please Login',
+                email: 'Email',
+                password: 'Password',
+                login: 'login',
+                forgot_password: 'forgot your password?',
+                error_400: 'There is a problem with the email you submitted',
+                error_401: 'You may not log in with that email and password',
+                error_500: 'Oops. The server ran into an error. Please contact support'
             },
             forgot_password: {
                 title: 'Forgot your password?',
                 instructions: 'No problem. Enter your email address and we will email you a password reset link.',
                 email: 'your email address',
                 go_button: 'send password reset',
-                login_link: 'back to login'
+                login_link: 'back to login',
+                error_400: 'There is a problem with the email you submitted',
+                error_404: 'We could not find an account with that email address',
+                error_500: 'Oops. The server ran into an error. Please contact support'
             },
             password_reset_sent : {
                 title: 'Password Reset Sent',
-                description: 'We have sent a link to reset your password to'
+                check_email: 'We have sent a link to reset your password to'
             },
             logout: "Logout"
         }

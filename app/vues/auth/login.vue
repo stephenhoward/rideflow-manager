@@ -1,7 +1,7 @@
 <template>
     <div class="login">
         <h3>{{ $t('login.title') }}</h3>
-        <div>{{ err }}</div>
+        <div class="error" v-if="err">{{ err }}</div>
         <div><input type="email"    v-bind:placeholder="$t('login.email')"    v-model="email"></div>
         <div><input type="password" v-bind:placeholder="$t('login.password')" v-model="password"></div>
         <button v-on:click="doLogin" type="button">{{ $t("login.login") }}</button>
@@ -34,7 +34,9 @@ export default {
                     window.app.$router.push('/');
                 })
                 .catch((error) => {
-                    this.err = error;
+                    this.err = this.$i18n.te('login.error_' + error )
+                        ? this.$i18n.t( 'login.error_' + error )
+                        : error;
                 });
         },
         doLogout: function() {

@@ -37,7 +37,7 @@ body {
     display: grid;
     height: 100%;
     min-height: 100%;
-    div.login, div.forgot_password {
+    div.login, div.forgot_password,div.password_reset_sent {
         padding: 20px 15px;
         max-width: 300px;
         border: 1px solid #ccc;
@@ -57,7 +57,10 @@ body {
             display: block;
             justify-self: right;
         }
-
+        div.error {
+            color: #f00;
+            font-weight: 500;
+        }
     }
     aside {
         display: flex;
