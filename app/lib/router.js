@@ -34,7 +34,7 @@ let _composeModelVue = ( type, vue ) => {
 
 module.exports = {
 
-     routes : [
+    routes : [
       { 
           path: '/', component: require('../vues/root.vue'),
           children: [
@@ -54,6 +54,7 @@ module.exports = {
       },
       { path: '/login',           component: require('../vues/auth/login.vue'),           name: 'login',           props: true },
       { path: '/password/forgot', component: require('../vues/auth/password_forgot.vue'), name: 'forgot_password', props: true },
-      { path: '/password/reset_sent', component: require('../vues/auth/password_reset_sent.vue'), name: 'reset_sent', props: true }
+      { path: '/password/reset_sent',   component: require('../vues/auth/password_reset_sent.vue'), name: 'reset_sent',     props: true },
+      { path: '/password/reset/:token', component: require('../vues/auth/password_reset.vue'),      name: 'reset_password', props: true }
     ]
   };

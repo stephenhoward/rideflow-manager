@@ -29,6 +29,9 @@ window.app = new Vue({
 
 app.$mount('#rfapp');
 
-if ( ! authorize.has_token() && window.app.$router.currentRoute && window.app.$router.currentRoute.path != '/login' ) {
-    window.app.$router.push('/login');
+let $router = window.app.$router;
+
+if ( ! authorize.has_token() && $router.currentRoute
+ && ! ( $router.currentRoute.name == 'login' || $router.currentRoute.name == 'reset_password' ) ) {
+    $router.push({ name: 'login' });
 }

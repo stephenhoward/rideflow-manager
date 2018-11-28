@@ -45,6 +45,13 @@ module.exports = {
                 title: 'Password Reset Sent',
                 check_email: 'We have sent a link to reset your password to'
             },
+            password_reset: {
+                title: 'Reset Your Password',
+                instructions: 'Please choose a new password',
+                new_password: 'password',
+                new_password_again: 'repeat password',
+                go_button: 'save new password'
+            },
             logout: "Logout"
         }
     }
