@@ -50,7 +50,9 @@ module.exports = {
                 instructions: 'Please choose a new password',
                 new_password: 'password',
                 new_password_again: 'repeat password',
-                go_button: 'save new password'
+                go_button: 'save new password',
+                error_401: 'your reset token has expired',
+                error_404: 'your reset token has expired'
             },
             logout: "Logout"
         }

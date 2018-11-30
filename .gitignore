@@ -2,3 +2,4 @@ node_modules/*
 ansible/playbook.retry
 package-lock.json
 public/*
+.DS_Store
